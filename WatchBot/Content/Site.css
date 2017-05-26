@@ -1,0 +1,431 @@
+﻿body {
+    background: #161616;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+h1, h2, h3, h4, h5, h6,
+label {
+    color: #a9a9a9;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.text-orange {
+    color: #26A69A;
+    font-size: 200%;
+}
+
+.text-bold {
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.my-nav {
+    margin-bottom: 0;
+    height: 80px;
+    background: linear-gradient( 0deg, transparent, #161616); 
+    border: none;
+}
+
+.feature-img {
+    position: relative;
+    background: #161616;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: -160px;
+    z-index: -1;
+    top: -80px;
+    padding: 0;
+    max-height: 750px;
+    overflow: hidden;
+}
+.feature-img img {
+    margin-top: -2%;
+}
+
+.feature-info {
+    position: relative;
+    height: 130px;
+    width: 100%;
+    background: transparent;
+    z-index: 0;
+    top: -140px;
+    margin-bottom: -130px;
+}
+
+.feature-info h1 {
+    max-width: 600px;
+    font-size: 270%;
+    color: white;
+    margin-bottom: 0;
+}
+
+.feature-info a:hover {
+    text-decoration: none;
+}
+
+.feature-info div p {
+    max-width: 600px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.feature-img-fade {
+    height: 450px;
+    background: linear-gradient( 180deg, transparent, #161616);
+    position: relative;
+    top: -370px;
+    z-index: -1;
+    margin-bottom: -420px;
+}
+
+.my-container {
+    padding: 0 7%;
+}
+
+
+.tn-title {
+    left: 0;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+}
+.tn-title p {
+    width: 100%;
+    color: #FFFFFF !important;
+    font-size: 130%;
+    text-shadow: -1px 0 #161616, 0 1px #161616, 1px 0 #161616, 0 -1px #161616;
+    bottom: 0;
+    position: absolute;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 0;
+    padding-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.carousel-wrapper {
+    width: 100%;
+    position: relative;
+    margin-bottom: 12.5em;
+}
+
+.carousel-outer {
+    width: 100%;
+    display: inline-block;
+    z-index: 0;
+}
+
+.prev, .next {
+    z-index: 1;
+    top: 0;
+    position: absolute;
+    height: 96%;
+    margin-left: -54px;
+}
+.next {
+    right: 0;
+    margin-left: 0;
+    margin-right: -54px;
+}
+
+.prev i, .next i, .prev i:hover, .next i:hover, .prev i:active, .next i:active {
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: #26A69A;
+    box-shadow: none;
+}
+.prev i:hover, .next i:hover {
+    color: #BBB;
+}
+
+.prev i span, .next i span {
+    top: 40%;
+    font-size: 24px;
+}
+
+.item {
+    width: 100%;
+}
+
+.item:hover {
+    opacity: 0.8;
+}
+
+/*Movie.cshtml specific*/
+
+.backdrop {
+    position: relative;
+    background: #161616;
+    height: 705px;
+    margin-left: 0;
+    margin-right: 0;
+    top: -80px;
+    padding: 0;
+}
+
+.heroImg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    margin-left: -50%;
+    min-height: 705px;
+    z-index: 0;
+}
+
+.gradient {
+    height: 100%;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0.91;
+    max-height: 705px;
+}
+
+.title {
+    color: #F8F8F8;
+}
+
+.title-year {
+    color: #e0e0e0;
+    font-weight: 400;
+    opacity: 0.5;
+}
+
+.details-content {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding-top: 80px;
+    padding-left: 12%;
+    padding-right: 12%;
+    overflow: hidden;
+}
+
+.details-poster {
+    margin-left: 5%;
+    margin-top: 0;
+}
+
+.details-poster img {
+    max-height: 350px;
+}
+
+.details-content > div > div > h1 {
+    margin: 0 0 1% 0;
+    font-size: 250%;
+}
+
+#details-info {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.genre-container {
+    width: 100%;
+}
+
+.genre {
+    display: inline;
+    font-size: 90%;
+    margin-right: 10px;
+    padding: 3px;
+    border: 1px solid #C0C0C0;
+    border-radius: 0.2em !important;
+    margin-bottom: 2%;
+    color: #c0c0c0;
+}
+
+.rating {
+    font-weight: bold;
+    font-size: 120%;
+    margin: 0;
+    color: #C0C0C0;
+
+}
+
+.rating img {
+    width: 40px;
+}
+
+.description {
+    /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+    font-size: 110%;
+    color: #F8F8F8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 200px;
+}
+
+.runtime {
+    color: #C0C0C0;
+}
+
+.myBtn {
+    background: transparent;
+    border-color: #e0e0e0;
+    color: #e0e0e0;
+}
+
+.myBtn:visited,
+.myBtn:active,
+.myBtn:focus,
+.myBtn:hover {
+    background: rgba(17,17,17,120);
+    border-color: #e0e0e0;
+    color: #e0e0e0;
+}
+
+hr.style1{
+    margin: 20px 5%;
+}
+
+.actor-row {
+    text-align: center;
+    overflow: hidden;
+}
+
+.details-actor {
+    display: inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:center;
+    /* inline-block space fix */
+    margin-right:-4px;
+    margin-top: 0;
+    margin-left: 2%;
+    margin-right: 2%;
+    min-height: 150px;
+    padding: 0;
+    padding-bottom: 400px;
+}
+
+.details-actor p{
+        min-height: 40px;
+        color: #F8F8F8;
+}
+
+.details-actor div {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.details-actor div img {
+    width: 150px;
+    margin: -1.3em 0 0 0;
+}
+
+.details-subcontent {
+    width: 100%;
+    margin-top: -80px;
+    height: 400px;
+    opacity: 0.2;
+}
+
+@media screen and (max-width: 830px) {
+    .details-content {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+    .details-actor div {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    }
+    .details-actor div img {
+    width: 120px;
+    margin: -1.3em 0 0 0;
+    }
+}
+
+@media screen and (max-width: 770px) {
+    .details-poster {
+        margin-left: 1%;
+        width: 20px;
+    }
+    .prev, .next {
+        display: none;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .details-content {
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+
+    .details-content > div > div > h1{
+        font-size: 200%;
+        margin-bottom: 1rem;
+    }
+
+    .feature-info div h1 {
+        font-size: 180%;
+        position: absolute;
+        bottom: 0;
+    }
+
+    .feature-info div p {
+        display: none;
+    }
+
+    .feature-img-fade {
+    height: 150px;
+    top: -70px;
+    margin-bottom: -120px;
+    }
+    
+    .description {
+        font-size: 100%;
+    }
+
+    .carousel {
+        width: 100%;
+    }
+
+    .home-margins {
+        margin-right: 2rem;
+    }
+    
+    .details-actor {
+        width: 100px;
+    }
+
+    .details-actor p{
+        min-height: 40px;
+    }
+
+    .details-actor div {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    }
+    .details-actor div img {
+    width: 100px;
+    margin: -1.3em 0 0 0;
+    }
+}

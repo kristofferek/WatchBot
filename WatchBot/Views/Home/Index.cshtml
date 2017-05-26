@@ -1,0 +1,68 @@
+﻿@model  WatchBot.Models.DiscoverViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.FeaturePopular)
+<div class="my-container">
+    <div>
+        <h3 class="carousel-title text-orange text-bold">POPULAR</h3>
+    </div>
+    @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Popular)
+</div>
+@Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.FeatureTopRated)
+<div class="my-container">
+    <div>
+        <h3 class="carousel-title text-orange text-bold">TOP RATED</h3>
+    </div>
+    @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.TopRated)
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".owl-carousel").owlCarousel({
+                margin: 4,
+                stagePadding: 20,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    1000: {
+                        items: 3
+                    },
+                    1200: {
+                        items: 4
+                    },
+                    1500: {
+                        items: 5
+                    }
+                },
+                loop: true,
+                slideBy: "page",
+                lazyLoad: false
+            });
+
+            var owl = $("#@Model.Popular.First().Id.ToString()");
+            $("#@Model.Popular.First().Id.ToString()prev").click(function () {
+                owl.trigger('prev.owl');
+            });
+            $("#@Model.Popular.First().Id.ToString()next").click(function () {
+                owl.trigger('next.owl');
+            });
+
+            var owl2 = $("#@Model.TopRated.First().Id.ToString()");
+            $("#@Model.TopRated.First().Id.ToString()prev").click(function () {
+                owl2.trigger('prev.owl');
+            });
+            $("#@Model.TopRated.First().Id.ToString()next").click(function () {
+                owl2.trigger('next.owl');
+            });
+        });
+    </script>
+}

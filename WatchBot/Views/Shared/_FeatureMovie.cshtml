@@ -1,0 +1,17 @@
+﻿@model WatchBot.Models.MovieViewModel
+
+<div class="feature-img row">
+    <img style="height: auto; width: 100%;" src="@Model.Backdrop" />
+</div>
+<div class="feature-info">
+    <div class="my-container">
+        <a href=@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })>
+            <h1 class="text-bold">@Model.Title</h1>
+        </a>
+        <p class="description">@Model.Description</p>
+    </div>
+</div>
+<div class="feature-img-fade"></div>
+<style>
+    .feature-info h1:hover {color:@Model.ProminentColor;}
+</style>

@@ -1,0 +1,8 @@
+﻿@model WatchBot.Models.MovieViewModel
+
+<div class="item">
+    <a href=@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })>
+        <img src="@Model.Backdrop"/>
+        <div class="tn-title item"><p>@Model.Title.ToUpper()</p></div>
+    </a>
+</div>

@@ -1,0 +1,50 @@
+﻿@using WatchBot.Utils
+@model WatchBot.Models.MovieViewModel
+
+<div class="backdrop">
+    <div class="heroImg" style="background: url(@Model.Backdrop) 50% no-repeat;background-size:cover;height:100%;"></div>
+    <div class="gradient" style="background-image: radial-gradient(at 10% 30%, @Model.ProminentColor 0%, #161616 90%);"></div>
+    <div class="details-content">
+        <div class="row">
+            <a class="col-xs-1 col-sm-3 col-md-2 details-poster" href="@Model.Poster">
+                <img id="poster" class="img-responsive" src="@Model.Poster" />
+            </a>
+            <div id="details-info" class="col-xs-10 col-sm-8 col-md-8">
+                <h1 class="title text-bold">@Model.Title<span class="title-year"> (@Model.ReleaseDate.Split('-')[0])</span></h1>
+                
+                <div class="btn-group">
+                    @foreach (var x in Model.Genres)
+                    {<span class="btn genre">@x.Name.ToString()</span>}
+                </div>
+                    
+                <p class="rating">
+                    <img src="~/Content/images/IMDb-icon.png"/>
+                    @Model.Rating
+                </p>
+                <div><p class="description">@Model.Description</p></div>
+                <p class="runtime"><span class="glyphicon glyphicon-time runtime" aria-hidden="true"></span>
+                    @Model.GetHours()h @Model.GetMinutes()min
+                </p>
+                <button type="button" class="btn btn-default myBtn">
+                    <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+                    Watch trailer
+                </button>
+            </div>
+        </div>
+        <hr class="style1" style="border-top: 2px solid @Model.ProminentColor;">
+        <div class="actor-row">
+            @foreach (var x in Model.Actors)
+            {
+                <div class="details-actor">
+                    <div class="img-circle" style="border: 2px solid @Model.ProminentColor;">
+                        <img src="@x.Picture"/>
+                    </div>
+                    <p>@x.Name</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="details-subcontent" style="background: @Model.ProminentColor;">
+
+</div>
