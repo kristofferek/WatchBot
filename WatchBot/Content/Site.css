@@ -34,9 +34,45 @@ textarea {
 
 .my-nav {
     margin-bottom: 0;
-    height: 80px;
     background: linear-gradient( 0deg, transparent, #161616); 
     border: none;
+    font-size: 15px;
+}
+
+.navbar-default .navbar-nav > li > a{
+    color: #d0d0d0;
+}
+
+.navbar-brand {
+    padding-top: 10px;
+    padding-bottom: 0;
+}
+
+.nav-logo {
+    height: 35px;
+    background: transparent;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    background-color: rgba(38, 166, 154, 0.6);
+    color: #f0f0f0;
+}
+
+.navbar-default .navbar-nav > li > a{
+    color: #f0f0f0;
+}
+.navbar-default .navbar-nav > li > a:hover {
+    color:#26a69a;
+}
+
+.navbar-default .navbar-nav > .dropdown > a .caret, .navbar-default .navbar-nav > .dropdown > a:hover .caret{
+    border-top-color: #f0f0f0;
+    border-bottom-color: #f0f0f0;
+}
+
+.dropdown-menu {
+    background-color: rgba(255,255,255,0.9)
 }
 
 .feature-img {
@@ -53,6 +89,8 @@ textarea {
 }
 .feature-img img {
     margin-top: -2%;
+    -webkit-transition: width 2s; /* Safari */
+    transition: width 2s;
 }
 
 .feature-info {
@@ -168,7 +206,7 @@ textarea {
 }
 
 .item:hover {
-    opacity: 0.8;
+    width: 101%;
 }
 
 /*Movie.cshtml specific*/
