@@ -6,7 +6,7 @@ using System.Web;
 using Microsoft.Ajax.Utilities;
 using WatchBot.Models;
 
-namespace WatchBot.Models
+namespace WatchBot.Models.ViewModels
 {
     public class MovieViewModel
     {
@@ -27,14 +27,14 @@ namespace WatchBot.Models
         public int Runtime { get; set; }
         public string ReleaseDate { get; set; }
         public string ProminentColor { get; set; }
-        public ICollection<ActorViewModel> Actors { get; set; }
+        public ICollection<Actor> Actors { get; set; }
 
-        public int GetHours()
+        public int GetRuntimeHours()
         {
             return (Runtime / 60);
         }
 
-        public int GetMinutes()
+        public int GetRuntimeMinutes()
         {
             return (Runtime % 60);
         }

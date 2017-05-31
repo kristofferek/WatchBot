@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using WatchBot.Models;
 
-namespace WatchBot.Models
+namespace WatchBot.Models.ViewModels
 {
     public class DiscoverViewModel
     {

@@ -1,5 +1,5 @@
 ﻿@using WatchBot.Utils
-@model WatchBot.Models.MovieViewModel
+@model WatchBot.Models.ViewModels.MovieViewModel
 
 <div class="backdrop">
     <div class="heroImg" style="background: url(@Model.Backdrop) 50% no-repeat;background-size:cover;height:100%;"></div>
@@ -23,7 +23,7 @@
                 </p>
                 <div><p class="description">@Model.Description</p></div>
                 <p class="runtime"><span class="glyphicon glyphicon-time runtime" aria-hidden="true"></span>
-                    @Model.GetHours()h @Model.GetMinutes()min
+                    @Model.GetRuntimeHours()h @Model.GetRuntimeMinutes()min
                 </p>
                 <button type="button" class="btn btn-default myBtn">
                     <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>

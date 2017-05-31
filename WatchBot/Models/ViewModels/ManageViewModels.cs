@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace WatchBot.Models
+namespace WatchBot.Models.ViewModels
 {
     public class IndexViewModel
     {

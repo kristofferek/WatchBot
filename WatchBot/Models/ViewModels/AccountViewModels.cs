@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace WatchBot.Models
+namespace WatchBot.Models.ViewModels
 {
     public class ExternalLoginConfirmationViewModel
     {

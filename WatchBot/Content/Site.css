@@ -34,12 +34,12 @@ textarea {
 
 .my-nav {
     margin-bottom: 0;
-    background: linear-gradient( 0deg, transparent, #161616); 
+    background: linear-gradient( 0deg, transparent, #161616);
     border: none;
     font-size: 15px;
 }
 
-.navbar-default .navbar-nav > li > a{
+.navbar-default .navbar-nav > li > a {
     color: #d0d0d0;
 }
 
@@ -59,20 +59,21 @@ textarea {
     color: #f0f0f0;
 }
 
-.navbar-default .navbar-nav > li > a{
+.navbar-default .navbar-nav > li > a {
     color: #f0f0f0;
 }
-.navbar-default .navbar-nav > li > a:hover {
-    color:#26a69a;
-}
 
-.navbar-default .navbar-nav > .dropdown > a .caret, .navbar-default .navbar-nav > .dropdown > a:hover .caret{
+    .navbar-default .navbar-nav > li > a:hover {
+        color: #26a69a;
+    }
+
+.navbar-default .navbar-nav > .dropdown > a .caret, .navbar-default .navbar-nav > .dropdown > a:hover .caret {
     border-top-color: #f0f0f0;
     border-bottom-color: #f0f0f0;
 }
 
 .dropdown-menu {
-    background-color: rgba(255,255,255,0.9)
+    background-color: rgba(255,255,255,0.9);
 }
 
 .feature-img {
@@ -87,11 +88,12 @@ textarea {
     max-height: 750px;
     overflow: hidden;
 }
-.feature-img img {
-    margin-top: -2%;
-    -webkit-transition: width 2s; /* Safari */
-    transition: width 2s;
-}
+
+    .feature-img img {
+        margin-top: -2%;
+        -webkit-transition: width 2s; /* Safari */
+        transition: width 2s;
+    }
 
 .feature-info {
     position: relative;
@@ -103,24 +105,28 @@ textarea {
     margin-bottom: -130px;
 }
 
-.feature-info h1 {
-    max-width: 600px;
-    font-size: 270%;
-    color: white;
-    margin-bottom: 0;
-}
+    .feature-info h1 {
+        max-width: 600px;
+        font-size: 270%;
+        color: white;
+        margin-bottom: 0;
+    }
 
-.feature-info a:hover {
-    text-decoration: none;
-}
+    .feature-info h1:hover {
+            color: #26a69a;
+        }
 
-.feature-info div p {
-    max-width: 600px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
+    .feature-info a:hover {
+        text-decoration: none;
+    }
+
+    .feature-info div p {
+        max-width: 600px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
 
 .feature-img-fade {
     height: 450px;
@@ -144,21 +150,22 @@ textarea {
     position: absolute;
     z-index: 10;
 }
-.tn-title p {
-    width: 100%;
-    color: #FFFFFF !important;
-    font-size: 130%;
-    text-shadow: -1px 0 #161616, 0 1px #161616, 1px 0 #161616, 0 -1px #161616;
-    bottom: 0;
-    position: absolute;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-bottom: 0;
-    padding-bottom: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+
+    .tn-title p {
+        width: 100%;
+        color: #FFFFFF !important;
+        font-size: 130%;
+        text-shadow: -1px 0 #161616, 0 1px #161616, 1px 0 #161616, 0 -1px #161616;
+        bottom: 0;
+        position: absolute;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 0;
+        padding-bottom: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
 .carousel-wrapper {
     width: 100%;
@@ -179,35 +186,37 @@ textarea {
     height: 96%;
     margin-left: -54px;
 }
+
 .next {
     right: 0;
     margin-left: 0;
     margin-right: -54px;
 }
 
-.prev i, .next i, .prev i:hover, .next i:hover, .prev i:active, .next i:active {
-    height: 100%;
-    background: transparent;
-    border: none;
-    color: #26A69A;
-    box-shadow: none;
-}
-.prev i:hover, .next i:hover {
-    color: #BBB;
-}
+    .prev i, .next i, .prev i:hover, .next i:hover, .prev i:active, .next i:active {
+        height: 100%;
+        background: transparent;
+        border: none;
+        color: #26A69A;
+        box-shadow: none;
+    }
 
-.prev i span, .next i span {
-    top: 40%;
-    font-size: 24px;
-}
+        .prev i:hover, .next i:hover {
+            color: #BBB;
+        }
+
+        .prev i span, .next i span {
+            top: 40%;
+            font-size: 24px;
+        }
 
 .item {
     width: 100%;
 }
 
-.item:hover {
-    width: 101%;
-}
+    .item:hover {
+        width: 101%;
+    }
 
 /*Movie.cshtml specific*/
 
@@ -257,8 +266,9 @@ textarea {
     height: 100%;
     width: 100%;
     padding-top: 80px;
-    padding-left: 12%;
-    padding-right: 12%;
+    padding-left: 9%;
+    padding-right: 9%;
+    margin-top: 3%;
     overflow: hidden;
 }
 
@@ -267,9 +277,9 @@ textarea {
     margin-top: 0;
 }
 
-.details-poster img {
-    max-height: 350px;
-}
+    .details-poster img {
+        max-height: 350px;
+    }
 
 .details-content > div > div > h1 {
     margin: 0 0 1% 0;
@@ -301,12 +311,11 @@ textarea {
     font-size: 120%;
     margin: 0;
     color: #C0C0C0;
-
 }
 
-.rating img {
-    width: 40px;
-}
+    .rating img {
+        width: 40px;
+    }
 
 .description {
     /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
@@ -327,16 +336,16 @@ textarea {
     color: #e0e0e0;
 }
 
-.myBtn:visited,
-.myBtn:active,
-.myBtn:focus,
-.myBtn:hover {
-    background: rgba(17,17,17,120);
-    border-color: #e0e0e0;
-    color: #e0e0e0;
-}
+    .myBtn:visited,
+    .myBtn:active,
+    .myBtn:focus,
+    .myBtn:hover {
+        background: rgba(17,17,17,120);
+        border-color: #e0e0e0;
+        color: #e0e0e0;
+    }
 
-hr.style1{
+hr.style1 {
     margin: 20px 5%;
 }
 
@@ -347,11 +356,11 @@ hr.style1{
 
 .details-actor {
     display: inline-block;
-    float:none;
+    float: none;
     /* reset the text-align */
-    text-align:center;
+    text-align: center;
     /* inline-block space fix */
-    margin-right:-4px;
+    margin-right: -4px;
     margin-top: 0;
     margin-left: 2%;
     margin-right: 2%;
@@ -360,21 +369,23 @@ hr.style1{
     padding-bottom: 400px;
 }
 
-.details-actor p{
-        min-height: 40px;
+    .details-actor p {
         color: #F8F8F8;
-}
+        text-overflow: ellipsis;
+        max-height: 20px;
+        overflow: hidden;
+    }
 
-.details-actor div {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-}
+    .details-actor div {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+    }
 
-.details-actor div img {
-    width: 150px;
-    margin: -1.3em 0 0 0;
-}
+        .details-actor div img {
+            width: 150px;
+            margin: -1.3em 0 0 0;
+        }
 
 .details-subcontent {
     width: 100%;
@@ -388,15 +399,17 @@ hr.style1{
         padding-left: 4%;
         padding-right: 4%;
     }
+
     .details-actor div {
-    width: 120px;
-    height: 120px;
-    overflow: hidden;
+        width: 120px;
+        height: 120px;
+        overflow: hidden;
     }
-    .details-actor div img {
-    width: 120px;
-    margin: -1.3em 0 0 0;
-    }
+
+        .details-actor div img {
+            width: 120px;
+            margin: -1.3em 0 0 0;
+        }
 }
 
 @media screen and (max-width: 770px) {
@@ -404,6 +417,7 @@ hr.style1{
         margin-left: 1%;
         width: 20px;
     }
+
     .prev, .next {
         display: none;
     }
@@ -416,10 +430,10 @@ hr.style1{
         padding-right: 3%;
     }
 
-    .details-content > div > div > h1{
-        font-size: 200%;
-        margin-bottom: 1rem;
-    }
+        .details-content > div > div > h1 {
+            font-size: 200%;
+            margin-bottom: 1rem;
+        }
 
     .feature-info div h1 {
         font-size: 180%;
@@ -432,11 +446,11 @@ hr.style1{
     }
 
     .feature-img-fade {
-    height: 150px;
-    top: -70px;
-    margin-bottom: -120px;
+        height: 150px;
+        top: -70px;
+        margin-bottom: -120px;
     }
-    
+
     .description {
         font-size: 100%;
     }
@@ -448,22 +462,19 @@ hr.style1{
     .home-margins {
         margin-right: 2rem;
     }
-    
+
     .details-actor {
         width: 100px;
     }
 
-    .details-actor p{
-        min-height: 40px;
-    }
+        .details-actor div {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+        }
 
-    .details-actor div {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    }
-    .details-actor div img {
-    width: 100px;
-    margin: -1.3em 0 0 0;
-    }
+            .details-actor div img {
+                width: 100px;
+                margin: -1.1em 0 0 0;
+            }
 }

@@ -36,10 +36,10 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genres <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Drama</a></li>
-                                <li><a href="#">Documentary</a></li>
-                                <li><a href="#">Horror</a></li>
+                                <li><a href="@Url.Action("Genre", "Home", new {genre = "Action"})">Action</a></li>
+                                <li><a href="@Url.Action("Genre", "Home", new {genre = "Drama"})">Drama</a></li>
+                                <li><a href="@Url.Action("Genre", "Home", new {genre = "Documentary"})">Documentary</a></li>
+                                <li><a href="@Url.Action("Genre", "Home", new {genre = "Horror"})">Horror</a></li>
                             </ul>
                         </li>
                     </ul>

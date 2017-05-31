@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WatchBot.Models;
+using WatchBot.Models.ViewModels;
 
 namespace WatchBot.Controllers
 {
@@ -22,6 +23,11 @@ namespace WatchBot.Controllers
             return View(new DBWrapper().GetMovie(Int32.Parse(id)));
         }
 
+        public ActionResult Genre(string genre)
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Contact(String message)
         {
@@ -30,7 +36,7 @@ namespace WatchBot.Controllers
             return View();
         }
 
-        public ActionResult Foo()
+        public ActionResult About()
         {
             return View("About");
         }
