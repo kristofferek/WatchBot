@@ -25,10 +25,19 @@
                 <p class="runtime"><span class="glyphicon glyphicon-time runtime" aria-hidden="true"></span>
                     @Model.GetRuntimeHours()h @Model.GetRuntimeMinutes()min
                 </p>
-                <button type="button" class="btn btn-default myBtn">
+                <button id="trailer" class="btn btn-default myBtn">
                     <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
                     Watch trailer
                 </button>
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content myModal">
+                            <div class="modal-body videowrapper">
+                                <iframe frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <hr class="style1" style="border-top: 2px solid @Model.ProminentColor;">
@@ -48,3 +57,17 @@
 <div class="details-subcontent" style="background: @Model.ProminentColor;">
 
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+    $('#trailer').click(function () {
+        var src = "@Model.Trailer";
+        $('#myModal').modal('show');
+        $('#myModal iframe').attr('src', src);
+    });
+
+        $('#myModal').on('hidden.bs.modal', function () {
+            $('#myModal iframe').removeAttr('src');
+        })
+</script>
+}

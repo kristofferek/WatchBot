@@ -20,6 +20,7 @@ namespace WatchBot.Models.ViewModels
         public string Title { get; set; }
         public string Backdrop { get; set; }
         public Dictionary<string, int> Genres { get; set; }
+        public string Trailer { get; set; }
         public string ImdbID { get; set; }
         public double Rating { get; set; }
         public string Description { get; set; }

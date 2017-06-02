@@ -36,7 +36,7 @@ namespace WatchBot.Models
             {
                 wc.Encoding = Encoding.UTF8;
                 json = wc.DownloadString(BASE_URL + "movie/" + id
-                                         + "?api_key=" + API_KEY + "&language=en-US&include_video=false");
+                                         + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos");
             }
             var o = JObject.Parse(json);
             var m = GetMovieFromJObject(o);
@@ -51,8 +51,12 @@ namespace WatchBot.Models
                 Id = (int) o["id"],
                 Title = (string) o["title"],
                 Backdrop = "https://image.tmdb.org/t/p/w1280" + (string) o["backdrop_path"],
-                Description = (string) o["overview"]
-            };
+                Description = (string) o["overview"],
+                ImdbID = (string)o["imdb_id"],
+                Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
+                Rating = (double)o["vote_average"],
+                ReleaseDate = (string)o["release_date"]
+        };
 
             try
             {
@@ -62,16 +66,22 @@ namespace WatchBot.Models
                     var genre = JObject.FromObject(t);
                     movie.Genres[(string) genre["name"]] = (int) genre["id"];
                 }
+
+                var trailerArray = JArray.FromObject(o["videos"]["results"]);
+                foreach (var t in trailerArray)
+                {
+                    var trailer = JObject.FromObject(t);
+                    if (!trailer["type"].ToString().Equals("Trailer")) continue;
+                    movie.Trailer = "https://www.youtube.com/embed/" + trailer["key"] + "?autoplay=1";
+                    break;
+                }
+
             }
             catch (ArgumentNullException e)
             {
                 Console.WriteLine(e);
             }
 
-            movie.ImdbID = (string) o["imdb_id"];
-            movie.Poster = "https://image.tmdb.org/t/p/w500" + (string) o["poster_path"];
-            movie.Rating = (double) o["vote_average"];
-            movie.ReleaseDate = (string) o["release_date"];
             try
             {
                 movie.Runtime = (int) o["runtime"];
