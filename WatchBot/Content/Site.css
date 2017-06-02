@@ -22,7 +22,7 @@ textarea {
     max-width: 280px;
 }
 
-.text-orange {
+.heading-text {
     color: #26A69A;
     font-size: 200%;
 }
@@ -90,7 +90,7 @@ textarea {
 }
 
     .feature-img img {
-        margin-top: -2%;
+        margin-top: 2%;
         -webkit-transition: width 2s; /* Safari */
         transition: width 2s;
     }
@@ -392,6 +392,12 @@ hr.style1 {
     margin-top: -80px;
     height: 400px;
     opacity: 0.2;
+}
+
+/**Genre page specific*/
+
+.poster {
+    padding: 0;
 }
 
 @media screen and (max-width: 830px) {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
-using Colors;
 using Newtonsoft.Json.Linq;
 using WatchBot.Models.ViewModels;
 
@@ -15,54 +15,52 @@ namespace WatchBot.Models
         private const string API_KEY = "78a3dcb0adbc04e0efe7af4db390f544";
         private const string BASE_URL = "https://api.themoviedb.org/3/";
 
-        private DiscoverViewModel discoverViewModel;
-
-        private ICollection<Genre> genres;
-
-        private readonly ICollection<MovieViewModel> popular = new List<MovieViewModel>();
-        private readonly ICollection<MovieViewModel> topRated = new List<MovieViewModel>();
+        private Dictionary<string, int> _genres;
 
         public MovieViewModel GetMovie(int id)
         {
-            foreach (var movie in popular)
+            var dvm = HttpContext.Current.Session["Discover"] as DiscoverViewModel;
+            if (dvm != null)
             {
-                if (movie.Id != id) continue;
-                movie.Actors = GetActors(id);
-                return movie;
+                var movie = dvm.TopRated.ContainsKey(id) ? dvm.TopRated[id] : null;
+                movie = dvm.TopRated.ContainsKey(id) && movie != null ? dvm.TopRated[id] : null;
+                if (movie != null)
+                {
+                    movie.Actors = GetActors(movie.Id);
+                    return movie;
+                }
             }
-            foreach (var movie in topRated)
-            {
-                if (movie.Id != id) continue;
-                movie.Actors = GetActors(id);
-                return movie;
-            }
+
             string json;
             using (var wc = new WebClient())
             {
+                wc.Encoding = Encoding.UTF8;
                 json = wc.DownloadString(BASE_URL + "movie/" + id
                                          + "?api_key=" + API_KEY + "&language=en-US&include_video=false");
             }
             var o = JObject.Parse(json);
-            MovieViewModel m = GetMovieFromJObject(o);
+            var m = GetMovieFromJObject(o);
             m.Actors = GetActors(id);
             return m;
         }
 
         private MovieViewModel GetMovieFromJObject(JObject o)
         {
-            MovieViewModel movie = new MovieViewModel();
-            movie.Id = (int) o["id"];
-            movie.Title = (string) o["title"];
-            movie.Backdrop = "https://image.tmdb.org/t/p/w1280" + (string) o["backdrop_path"];
-            movie.Description = (string) o["overview"];
+            var movie = new MovieViewModel
+            {
+                Id = (int) o["id"],
+                Title = (string) o["title"],
+                Backdrop = "https://image.tmdb.org/t/p/w1280" + (string) o["backdrop_path"],
+                Description = (string) o["overview"]
+            };
 
             try
             {
                 var genArray = JArray.FromObject(o["genres"]);
-                for (var i = 0; i < genArray.Count; i++)
+                foreach (var t in genArray)
                 {
-                    var genre = JObject.FromObject(genArray[i]);
-                    movie.Genres.Add(new Genre((int) genre["id"], (string) genre["name"]));
+                    var genre = JObject.FromObject(t);
+                    movie.Genres[(string) genre["name"]] = (int) genre["id"];
                 }
             }
             catch (ArgumentNullException e)
@@ -83,34 +81,22 @@ namespace WatchBot.Models
                 Console.WriteLine(movie.Title);
                 Console.WriteLine(e);
             }
-            //movie.Actors = GetActors(movie.Id);
             movie.ProminentColor = Utils.Utils.GetDominantColor(
-                    GetBitmapFromUrl("https://image.tmdb.org/t/p/w92" +
-                                     (string) o["poster_path"]));
+                GetBitmapFromUrl("https://image.tmdb.org/t/p/w92" +
+                                 (string) o["poster_path"]));
 
             return movie;
         }
 
-        public ICollection<MovieViewModel> GetPopularList(int amount)
+        private Dictionary<int, MovieViewModel> GetList(int amount, string type, string genre)
         {
-            if (popular.Count > 0)
-                return popular;
+            var list = new Dictionary<int, MovieViewModel>();
             var query =
-                "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_count.gte=200&with_original_language=en";
-            return GetList(amount, query, popular);
-        }
+                "&language=en-US&sort_by=" + type
+                + "&include_adult=false&include_video=false&page=1&vote_count.gte=200&with_original_language=en";
+            if (genre != null)
+                query = query + "&with_genres=" + genre;
 
-        public ICollection<MovieViewModel> GetTopRatedList(int amount)
-        {
-            if (topRated.Count > 0)
-                return topRated;
-            var query =
-                "&language=en-US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=200&with_original_language=en";
-            return GetList(amount, query, topRated);
-        }
-
-        private ICollection<MovieViewModel> GetList(int amount, string query, ICollection<MovieViewModel> movies)
-        {
             string json;
             using (var wc = new WebClient())
             {
@@ -123,9 +109,10 @@ namespace WatchBot.Models
             for (var i = 0; i < amount && i < results.Count; i++)
             {
                 var movie = JObject.FromObject(results[i]);
-                movies.Add(GetMovieFromJObject(movie));
+                var m = GetMovieFromJObject(movie);
+                list[m.Id] = m;
             }
-            return movies;
+            return list;
         }
 
         private List<Actor> GetActors(int movieId)
@@ -151,11 +138,12 @@ namespace WatchBot.Models
             return actorList;
         }
 
-        private ICollection<Genre> GetGenres()
+        private void FetchGenres()
         {
-            if (genres != null)
-                return genres;
-            genres = new List<Genre>();
+            _genres = HttpContext.Current.Session["Genres"] as Dictionary<string, int>;
+            if (_genres != null)
+                return;
+            _genres = new Dictionary<string, int>();
             string json;
             using (var wc = new WebClient())
             {
@@ -168,9 +156,9 @@ namespace WatchBot.Models
             {
                 var genre = JObject.FromObject(t);
 
-                genres.Add(new Genre((int) genre["id"], (string) genre["name"]));
+                _genres[(string) genre["name"]] = (int) genre["id"];
             }
-            return genres;
+            HttpContext.Current.Session["Genres"] = _genres;
         }
 
         private static Bitmap GetBitmapFromUrl(string src)
@@ -187,27 +175,43 @@ namespace WatchBot.Models
             if (dvb == null) return;
             var r = new Random();
             var index = r.Next(dvb.Popular.Count - 1);
-            dvb.FeaturePopular = dvb.Popular.ElementAt(index);
-            dvb.Popular.Remove(dvb.FeaturePopular);
+            dvb.FeaturePopular = dvb.Popular.Values.ElementAt(index);
+            dvb.Popular.Remove(dvb.FeaturePopular.Id);
 
             index = r.Next(dvb.TopRated.Count - 1);
-            dvb.FeatureTopRated = dvb.TopRated.ElementAt(index);
-            dvb.TopRated.Remove(dvb.FeatureTopRated);
+            dvb.FeatureTopRated = dvb.TopRated.Values.ElementAt(index);
+            dvb.TopRated.Remove(dvb.FeatureTopRated.Id);
         }
 
         public DiscoverViewModel GetDiscoverViewModel()
         {
-            discoverViewModel = HttpContext.Current.Session["Discover"] as DiscoverViewModel;
+            var discoverViewModel = HttpContext.Current.Session["Discover"] as DiscoverViewModel;
             if (discoverViewModel != null)
                 return discoverViewModel;
             discoverViewModel = new DiscoverViewModel
             {
-                Popular = GetPopularList(21),
-                TopRated = GetTopRatedList(21)
+                Popular = GetList(21, "popularity.desc", null),
+                TopRated = GetList(21, "vote_average.desc", null)
             };
             SetFeatureMovies(discoverViewModel);
             HttpContext.Current.Session["Discover"] = discoverViewModel;
             return discoverViewModel;
+        }
+
+        public GenreViewModel GetGenreViewModel(string genre)
+        {
+            var genreViewModel = HttpContext.Current.Session[genre] as GenreViewModel;
+            if (genreViewModel != null)
+                return genreViewModel;
+            FetchGenres();
+            genreViewModel = new GenreViewModel
+            {
+                GenreName = genre,
+                GenreId = _genres[genre],
+                Movies = GetList(20, "popularity.desc", _genres[genre].ToString())
+            };
+            HttpContext.Current.Session[genre] = genreViewModel;
+            return genreViewModel;
         }
     }
 }

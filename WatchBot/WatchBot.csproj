@@ -178,7 +178,6 @@
     <Compile Include="Utils\ColorMath.cs" />
     <Compile Include="Models\DBWrapper.cs" />
     <Compile Include="Models\ViewModels\DiscoverViewModel.cs" />
-    <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ViewModels\GenreViewModel.cs" />
     <Compile Include="Models\ViewModels\ManageViewModels.cs" />
@@ -261,6 +260,7 @@
     <Content Include="Views\Shared\_FeatureMovie.cshtml" />
     <Content Include="Views\Shared\_Carousel.cshtml" />
     <Content Include="Views\Home\Genre.cshtml" />
+    <Content Include="Views\Shared\_Poster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,7 @@
+﻿@model WatchBot.Models.ViewModels.MovieViewModel
+  
+<div class="col-sm-3 col-md-2 poster">
+    <a href="@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })">
+        <img class="img-responsive" src="@Model.Poster" />
+    </a>
+</div>@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })

@@ -7,14 +7,14 @@
     <div class="details-content">
         <div class="row">
             <a class="col-xs-1 col-sm-3 col-md-2 details-poster" href="@Model.Poster">
-                <img id="poster" class="img-responsive" src="@Model.Poster" />
+                <img class="img-responsive" src="@Model.Poster" />
             </a>
             <div id="details-info" class="col-xs-10 col-sm-8 col-md-8">
                 <h1 class="title text-bold">@Model.Title<span class="title-year"> (@Model.ReleaseDate.Split('-')[0])</span></h1>
                 
                 <div class="btn-group">
-                    @foreach (var x in Model.Genres)
-                    {<span class="btn genre">@x.Name.ToString()</span>}
+                    @foreach (var x in Model.Genres.Keys)
+                    {<span class="btn genre">@x</span>}
                 </div>
                     
                 <p class="rating">

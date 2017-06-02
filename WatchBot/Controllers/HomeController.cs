@@ -23,9 +23,9 @@ namespace WatchBot.Controllers
             return View(new DBWrapper().GetMovie(Int32.Parse(id)));
         }
 
-        public ActionResult Genre(string genre)
+        public ActionResult Genre(string id)
         {
-            return View();
+            return View(new DBWrapper().GetGenreViewModel(id));
         }
 
         [HttpPost]

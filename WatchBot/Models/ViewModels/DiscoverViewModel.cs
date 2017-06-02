@@ -10,8 +10,8 @@ namespace WatchBot.Models.ViewModels
     {
         public MovieViewModel FeaturePopular { get; set; }
         public MovieViewModel FeatureTopRated { get; set; }
-        public ICollection<MovieViewModel> Popular { get; set; }
-        public ICollection<MovieViewModel> TopRated { get; set; }
+        public Dictionary<int, MovieViewModel> Popular { get; set; }
+        public Dictionary<int, MovieViewModel> TopRated { get; set; }
 
 
     }

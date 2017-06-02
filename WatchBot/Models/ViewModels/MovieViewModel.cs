@@ -13,13 +13,13 @@ namespace WatchBot.Models.ViewModels
 
         public MovieViewModel()
         {
-            this.Genres = new List<Genre>();
+            Genres = new Dictionary<string, int>();
         }
 
         public int Id { get; set; }
         public string Title { get; set; }
         public string Backdrop { get; set; }
-        public ICollection<Genre> Genres { get; set; }
+        public Dictionary<string, int> Genres { get; set; }
         public string ImdbID { get; set; }
         public double Rating { get; set; }
         public string Description { get; set; }
