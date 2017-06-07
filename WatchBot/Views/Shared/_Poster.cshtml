@@ -1,7 +1,12 @@
 ﻿@model WatchBot.Models.ViewModels.MovieViewModel
   
-<div class="col-sm-3 col-md-2 poster">
-    <a href="@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })">
-        <img class="img-responsive" src="@Model.Poster" />
-    </a>
+<div class="col-xs-4 col-sm-3 col-lg-2 poster">
+    <div>
+        <a href="@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })">
+            <img class="img-responsive" src="@Model.Poster" />
+            <div class="overlay">
+                <p><span class="text-bold">@Model.Title</span><br/>(@Model.ReleaseDate.Split('-')[0])</p>
+            </div>
+        </a>
+    </div>
 </div>

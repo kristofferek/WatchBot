@@ -22,14 +22,14 @@ textarea {
     max-width: 280px;
 }
 
-.heading-text {
+.header-text {
+    margin-top: 0;
     color: #26A69A;
     font-size: 200%;
 }
 
 .text-bold {
     font-weight: 700;
-    margin-top: 0;
 }
 
 .my-nav {
@@ -90,9 +90,7 @@ textarea {
 }
 
     .feature-img img {
-        margin-top: 2%;
-        -webkit-transition: width 2s; /* Safari */
-        transition: width 2s;
+        margin-top: 1%;
     }
 
 .feature-info {
@@ -101,7 +99,7 @@ textarea {
     width: 100%;
     background: transparent;
     z-index: 0;
-    top: -140px;
+    top: -160px;
     margin-bottom: -130px;
 }
 
@@ -132,9 +130,9 @@ textarea {
     height: 450px;
     background: linear-gradient( 180deg, transparent, #161616);
     position: relative;
-    top: -370px;
+    top: -390px;
     z-index: -1;
-    margin-bottom: -420px;
+    margin-bottom: -440px;
 }
 
 .my-container {
@@ -248,6 +246,7 @@ textarea {
     left: 0;
     width: 100%;
     opacity: 0.91;
+    filter: alpha(opacity=91); /* For IE8 and earlier */
     max-height: 705px;
 }
 
@@ -259,6 +258,7 @@ textarea {
     color: #e0e0e0;
     font-weight: 400;
     opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
 }
 
 .details-content {
@@ -351,7 +351,6 @@ textarea {
     }
 
 .description {
-    /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
     font-size: 110%;
     color: #F8F8F8;
     overflow: hidden;
@@ -425,13 +424,48 @@ hr.style1 {
     margin-top: -80px;
     height: 400px;
     opacity: 0.2;
+    filter: alpha(opacity=20); /* For IE8 and earlier */
 }
 
 /*Genre page specific*/
 
+.genre-title {
+    margin-top: 30px;
+}
+
 .poster {
     padding: 0;
 }
+
+    .poster>div {
+        margin: 3px;
+        position: relative;
+    }
+
+    .poster .overlay {
+        position: absolute;
+        background-color: rgba(192,192,192,0.65);
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .poster p {
+        font-size: 120%;
+        padding: 7%;
+        color: #000;
+        
+    }
+
+    .poster img:hover + div, .poster .overlay:hover {
+        display: flex;
+    }
 
 @media screen and (max-width: 830px) {
     .modal-lg {
@@ -479,14 +513,23 @@ hr.style1 {
             margin-bottom: 1rem;
         }
 
+    .header-text {
+        font-size: 150%;
+    }
+
     .feature-info div h1 {
-        font-size: 180%;
+        font-size: 140%;
         position: absolute;
         bottom: 0;
+        margin-bottom: -40px;
     }
 
     .feature-info div p {
         display: none;
+    }
+
+    .feature-img img {
+        margin-top: 8%;
     }
 
     .feature-img-fade {
@@ -497,6 +540,10 @@ hr.style1 {
 
     .description {
         font-size: 100%;
+    }
+
+    .carousel-wrapper {
+        margin-bottom: 8em;
     }
 
     .carousel {
@@ -521,4 +568,8 @@ hr.style1 {
                 width: 100px;
                 margin: -1.1em 0 0 0;
             }
+
+    .poster p {
+        font-size: 100%;
+    }
 }

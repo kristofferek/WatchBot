@@ -19,18 +19,6 @@ namespace WatchBot.Models
 
         public MovieViewModel GetMovie(int id)
         {
-            var dvm = HttpContext.Current.Session["Discover"] as DiscoverViewModel;
-            if (dvm != null)
-            {
-                var movie = dvm.TopRated.ContainsKey(id) ? dvm.TopRated[id] : null;
-                movie = dvm.TopRated.ContainsKey(id) && movie != null ? dvm.TopRated[id] : null;
-                if (movie != null)
-                {
-                    movie.Actors = GetActors(movie.Id);
-                    return movie;
-                }
-            }
-
             string json;
             using (var wc = new WebClient())
             {
@@ -71,8 +59,8 @@ namespace WatchBot.Models
                 foreach (var t in trailerArray)
                 {
                     var trailer = JObject.FromObject(t);
-                    if (!trailer["type"].ToString().Equals("Trailer")) continue;
                     movie.Trailer = "https://www.youtube.com/embed/" + trailer["key"] + "?autoplay=1";
+                    if (!trailer["type"].ToString().Equals("Trailer")) continue;
                     break;
                 }
 
@@ -110,6 +98,7 @@ namespace WatchBot.Models
             string json;
             using (var wc = new WebClient())
             {
+                wc.Encoding = Encoding.UTF8;
                 json = wc.DownloadString(BASE_URL + "discover/movie"
                                          + "?api_key=" + API_KEY + query);
             }
@@ -131,6 +120,7 @@ namespace WatchBot.Models
             string json;
             using (var wc = new WebClient())
             {
+                wc.Encoding = Encoding.UTF8;
                 json = wc.DownloadString(BASE_URL + "movie/" + movieId + "/credits"
                                          + "?api_key=" + API_KEY);
             }
@@ -139,10 +129,12 @@ namespace WatchBot.Models
             for (var i = 0; i < 5 && i < actors.Count; i++)
             {
                 var actorObj = JObject.FromObject(actors[i]);
-                var actor = new Actor();
-                actor.Name = (string) actorObj["name"];
-                actor.MovieName = (string) actorObj["character"];
-                actor.Picture = "https://image.tmdb.org/t/p/w500" + (string) actorObj["profile_path"];
+                var actor = new Actor
+                {
+                    Name = (string) actorObj["name"],
+                    MovieName = (string) actorObj["character"],
+                    Picture = "https://image.tmdb.org/t/p/w500" + (string) actorObj["profile_path"]
+                };
                 actorList.Add(actor);
             }
             return actorList;
@@ -157,6 +149,7 @@ namespace WatchBot.Models
             string json;
             using (var wc = new WebClient())
             {
+                wc.Encoding = Encoding.UTF8;
                 json = wc.DownloadString(BASE_URL + "genre/movie/list?api_key=" + API_KEY + "&language=en-US");
             }
             var o = JObject.Parse(json);

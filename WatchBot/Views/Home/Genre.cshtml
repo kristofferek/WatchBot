@@ -2,8 +2,8 @@
 
 
 <div class="my-container">
-    <h2 class="heading-text">@Model.GenreName</h2>
-    <div class="row">
+    <h2 class="genre-title text-bold header-text">@Model.GenreName.ToUpper()</h2>
+    <div class="row poster-grid">
         @foreach (var movie in Model.Movies.Values)
         {
             @Html.Partial($"~/Views/Shared/_Poster.cshtml", movie)

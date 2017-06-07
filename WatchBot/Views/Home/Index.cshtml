@@ -3,14 +3,14 @@
 @Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.FeaturePopular)
 <div class="my-container">
     <div>
-        <h3 class="carousel-title heading-text text-bold">POPULAR</h3>
+        <h3 class="header-text text-bold">POPULAR</h3>
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Popular.Values)
 </div>
 @Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.FeatureTopRated)
 <div class="my-container">
     <div>
-        <h3 class="carousel-title heading-text text-bold">TOP RATED</h3>
+        <h3 class="header-text text-bold">TOP RATED</h3>
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.TopRated.Values)
 </div>
