@@ -20,7 +20,7 @@ namespace WatchBot.Controllers
 
         public ActionResult Movie(string id)
         {
-            return View(new DBWrapper().GetMovie(Int32.Parse(id)));
+            return View(new DBWrapper().GetDetailsViewModel(id));
         }
 
         public ActionResult Genre(string id)

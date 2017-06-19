@@ -19,13 +19,9 @@ namespace WatchBot.Models
 
         public MovieViewModel GetMovie(int id)
         {
-            string json;
-            using (var wc = new WebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                json = wc.DownloadString(BASE_URL + "movie/" + id
-                                         + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos");
-            }
+            string query = BASE_URL + "movie/" + id
+                           + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos";
+            string json = GetJson(query);
             var o = JObject.Parse(json);
             var m = GetMovieFromJObject(o);
             m.Actors = GetActors(id);
@@ -86,26 +82,35 @@ namespace WatchBot.Models
             return movie;
         }
 
-        private Dictionary<int, MovieViewModel> GetList(int amount, string type, string genre)
+        private Dictionary<int, MovieViewModel> GetDiscoverList(int amount, string type, string genre)
         {
-            var list = new Dictionary<int, MovieViewModel>();
             var query =
                 "&language=en-US&sort_by=" + type
                 + "&include_adult=false&include_video=false&page=1&vote_count.gte=200&with_original_language=en";
             if (genre != null)
                 query = query + "&with_genres=" + genre;
 
-            string json;
-            using (var wc = new WebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                json = wc.DownloadString(BASE_URL + "discover/movie"
-                                         + "?api_key=" + API_KEY + query);
-            }
+            string fullQuery = BASE_URL + "discover/movie"
+                           + "?api_key=" + API_KEY + query;
+            string json = GetJson(fullQuery);
+            return ParseJsonArray(json);
+        }
+
+        private Dictionary<int, MovieViewModel> GetMovieSpecificList(int id, string type)
+        {
+            string query = BASE_URL + "movie/" + id + "/" + type
+                           + "?api_key=" + API_KEY + "&language=en-US&page=1";
+            string json = GetJson(query);
+            return ParseJsonArray(json);
+        }
+
+        private Dictionary<int, MovieViewModel> ParseJsonArray(string json)
+        {
+            var list = new Dictionary<int, MovieViewModel>();
             var o = JObject.Parse(json);
             var results = JArray.FromObject(o["results"]);
 
-            for (var i = 0; i < amount && i < results.Count; i++)
+            for (var i = 0; i < results.Count; i++)
             {
                 var movie = JObject.FromObject(results[i]);
                 var m = GetMovieFromJObject(movie);
@@ -117,13 +122,9 @@ namespace WatchBot.Models
         private List<Actor> GetActors(int movieId)
         {
             var actorList = new List<Actor>();
-            string json;
-            using (var wc = new WebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                json = wc.DownloadString(BASE_URL + "movie/" + movieId + "/credits"
-                                         + "?api_key=" + API_KEY);
-            }
+            string query = BASE_URL + "movie/" + movieId + "/credits"
+                           + "?api_key=" + API_KEY;
+            string json = GetJson(query);
             var o = JObject.Parse(json);
             var actors = JArray.FromObject(o["cast"]);
             for (var i = 0; i < 5 && i < actors.Count; i++)
@@ -146,12 +147,8 @@ namespace WatchBot.Models
             if (_genres != null)
                 return;
             _genres = new Dictionary<string, int>();
-            string json;
-            using (var wc = new WebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                json = wc.DownloadString(BASE_URL + "genre/movie/list?api_key=" + API_KEY + "&language=en-US");
-            }
+            string query = BASE_URL + "genre/movie/list?api_key=" + API_KEY + "&language=en-US";
+            string json = GetJson(query);
             var o = JObject.Parse(json);
             var results = JArray.FromObject(o["genres"]);
 
@@ -162,6 +159,17 @@ namespace WatchBot.Models
                 _genres[(string) genre["name"]] = (int) genre["id"];
             }
             HttpContext.Current.Session["Genres"] = _genres;
+        }
+
+        private string GetJson(string query)
+        {
+            string json;
+            using (var wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                json = wc.DownloadString(query);
+            }
+            return json;
         }
 
         private static Bitmap GetBitmapFromUrl(string src)
@@ -193,8 +201,8 @@ namespace WatchBot.Models
                 return discoverViewModel;
             discoverViewModel = new DiscoverViewModel
             {
-                Popular = GetList(21, "popularity.desc", null),
-                TopRated = GetList(21, "vote_average.desc", null)
+                Popular = GetDiscoverList(21, "popularity.desc", null),
+                TopRated = GetDiscoverList(21, "vote_average.desc", null)
             };
             SetFeatureMovies(discoverViewModel);
             HttpContext.Current.Session["Discover"] = discoverViewModel;
@@ -211,10 +219,19 @@ namespace WatchBot.Models
             {
                 GenreName = genre,
                 GenreId = _genres[genre],
-                Movies = GetList(20, "popularity.desc", _genres[genre].ToString())
+                Movies = GetDiscoverList(20, "popularity.desc", _genres[genre].ToString())
             };
             HttpContext.Current.Session[genre] = genreViewModel;
             return genreViewModel;
+        }
+
+        public DetailsViewModel GetDetailsViewModel(string movieId)
+        {
+            int id = Int32.Parse(movieId);
+            var detailsViewModel = new DetailsViewModel();
+            detailsViewModel.Movie = GetMovie(id);
+            detailsViewModel.Similar = GetMovieSpecificList(id, "similar");
+            return detailsViewModel;
         }
     }
 }

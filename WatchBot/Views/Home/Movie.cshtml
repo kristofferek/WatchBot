@@ -1,29 +1,29 @@
 ﻿@using WatchBot.Utils
-@model WatchBot.Models.ViewModels.MovieViewModel
+@model WatchBot.Models.ViewModels.DetailsViewModel
 
 <div class="backdrop">
-    <div class="heroImg" style="background: url(@Model.Backdrop) 50% no-repeat;background-size:cover;height:100%;"></div>
-    <div class="gradient" style="background-image: radial-gradient(at 10% 30%, @Model.ProminentColor 0%, #161616 90%);"></div>
+    <div class="heroImg" style="background: url(@Model.Movie.Backdrop) 50% no-repeat;background-size:cover;height:100%;"></div>
+    <div class="gradient" style="background-image: radial-gradient(at 10% 30%, @Model.Movie.ProminentColor 0%, #161616 90%);"></div>
     <div class="details-content">
         <div class="row">
-            <a class="col-xs-1 col-sm-3 col-md-2 details-poster" href="@Model.Poster">
-                <img class="img-responsive" src="@Model.Poster" />
+            <a class="col-xs-1 col-sm-3 col-md-2 details-poster" href="@Model.Movie.Poster">
+                <img class="img-responsive" src="@Model.Movie.Poster" />
             </a>
             <div id="details-info" class="col-xs-10 col-sm-8 col-md-8">
-                <h1 class="title text-bold">@Model.Title<span class="title-year"> (@Model.ReleaseDate.Split('-')[0])</span></h1>
+                <h1 class="title text-bold">@Model.Movie.Title<span class="title-year"> (@Model.Movie.ReleaseDate.Split('-')[0])</span></h1>
                 
                 <div class="btn-group">
-                    @foreach (var x in Model.Genres.Keys)
+                    @foreach (var x in Model.Movie.Genres.Keys)
                     {<span class="btn genre">@x</span>}
                 </div>
                     
                 <p class="rating">
                     <img src="~/Content/images/IMDb-icon.png"/>
-                    @Model.Rating
+                    @Model.Movie.Rating
                 </p>
-                <div><p class="description">@Model.Description</p></div>
+                <div><p class="description">@Model.Movie.Description</p></div>
                 <p class="runtime"><span class="glyphicon glyphicon-time runtime" aria-hidden="true"></span>
-                    @Model.GetRuntimeHours()h @Model.GetRuntimeMinutes()min
+                    @Model.Movie.GetRuntimeHours()h @Model.Movie.GetRuntimeMinutes()min
                 </p>
                 <button id="trailer" class="btn btn-default myBtn">
                     <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
@@ -40,12 +40,12 @@
                 </div>
             </div>
         </div>
-        <hr class="style1" style="border-top: 2px solid @Model.ProminentColor;">
+        <hr class="style1" style="border-top: 2px solid @Model.Movie.ProminentColor;">
         <div class="actor-row">
-            @foreach (var x in Model.Actors)
+            @foreach (var x in Model.Movie.Actors)
             {
                 <div class="details-actor">
-                    <div class="img-circle" style="border: 2px solid @Model.ProminentColor;">
+                    <div class="img-circle" style="border: 2px solid @Model.Movie.ProminentColor;">
                         <img src="@x.Picture"/>
                     </div>
                     <p>@x.Name</p>
@@ -54,20 +54,58 @@
         </div>
     </div>
 </div>
-<div class="details-subcontent" style="background: @Model.ProminentColor;">
-
+<div class="details-subcontent" style="background: @Model.Movie.ProminentColor;">
+    <div class="my-container">
+        @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Similar.Values)
+    </div>
 </div>
 
 @section Scripts{
     <script type="text/javascript">
     $('#trailer').click(function () {
-        var src = "@Model.Trailer";
+        var src = "@Model.Movie.Trailer";
         $('#myModal').modal('show');
         $('#myModal iframe').attr('src', src);
     });
 
-        $('#myModal').on('hidden.bs.modal', function () {
+    $('#myModal').on('hidden.bs.modal',
+        function() {
             $('#myModal iframe').removeAttr('src');
-        })
+        });
+
+    $(document).ready(function () {
+        $(".owl-carousel").owlCarousel({
+            margin: 4,
+            stagePadding: 20,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 3
+                },
+                1200: {
+                    items: 4
+                },
+                1500: {
+                    items: 5
+                }
+            },
+            loop: true,
+            slideBy: "page",
+            lazyLoad: false
+        });
+
+        var owl = $("#@Model.Similar.First().Value.Id.ToString()");
+        $("#@Model.Similar.First().Value.Id.ToString()prev").click(function () {
+            owl.trigger('prev.owl');
+        });
+        $("#@Model.Similar.First().Value.Id.ToString()next").click(function () {
+            owl.trigger('next.owl');
+        });
+    });
 </script>
 }
