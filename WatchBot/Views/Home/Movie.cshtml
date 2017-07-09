@@ -54,8 +54,11 @@
         </div>
     </div>
 </div>
-<div class="details-subcontent" style="background: @Model.Movie.ProminentColor;">
+<div class="similar-section" style="background: @Model.Movie.ProminentColor;">
     <div class="my-container">
+        <div>
+            <h3 class="header-text text-bold">SIMILAR MOVIES</h3>
+        </div>
         @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Similar.Values)
     </div>
 </div>

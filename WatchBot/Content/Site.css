@@ -419,11 +419,23 @@ hr.style1 {
             margin: -1.3em 0 0 0;
         }
 
-.details-subcontent {
+.similar-section {
     width: 100%;
     margin-top: -80px;
-    height: 400px;
 }
+    
+    .similar-section .header-text {
+        padding-top: 1%;
+    }
+
+    .similar-section .my-container {
+        padding-bottom: 2%;
+    }
+
+    .similar-section .carousel-wrapper {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
 
 /*Genre page specific*/
 
