@@ -18,6 +18,14 @@ namespace WatchBot
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Genre",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Genre", action = "Action", id = 1 }
+            );
+
+            //TODO
         }
     }
 }

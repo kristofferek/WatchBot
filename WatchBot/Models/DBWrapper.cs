@@ -209,7 +209,7 @@ namespace WatchBot.Models
             return discoverViewModel;
         }
 
-        public GenreViewModel GetGenreViewModel(string genre)
+        public GenreViewModel GetGenreViewModel(string genre, int page)
         {
             var genreViewModel = HttpContext.Current.Session[genre] as GenreViewModel;
             if (genreViewModel != null)

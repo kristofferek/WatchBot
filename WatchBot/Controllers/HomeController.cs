@@ -22,23 +22,5 @@ namespace WatchBot.Controllers
         {
             return View(new DBWrapper().GetDetailsViewModel(id));
         }
-
-        public ActionResult Genre(string id)
-        {
-            return View(new DBWrapper().GetGenreViewModel(id));
-        }
-
-        [HttpPost]
-        public ActionResult Contact(String message)
-        {
-            ViewBag.TheMessage = "Thanks, we got your message.";
-
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            return View("About");
-        }
     }
 }
