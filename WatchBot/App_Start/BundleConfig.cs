@@ -32,7 +32,8 @@ namespace WatchBot
                       "~/Content/simple-sidebar.css",
                       "~/Content/owl/owl.carousel.css",
                       "~/Content/owl/owl.theme.default.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/circlerating.css"));
         }
     }
 }

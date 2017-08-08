@@ -196,6 +196,7 @@
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\menu.png" />
     <Content Include="Content\images\owl.video.play.png" />
+    <Content Include="Content\CircleRating.css" />
     <Content Include="Content\owl\owl.carousel.css" />
     <Content Include="Content\owl\owl.carousel.min.css" />
     <Content Include="Content\owl\owl.theme.default.css" />

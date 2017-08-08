@@ -16,11 +16,17 @@
                     @foreach (var x in Model.Movie.Genres.Keys)
                     {<span class="btn genre">@x</span>}
                 </div>
-                    
-                <p class="rating">
-                    <img src="~/Content/images/IMDb-icon.png"/>
-                    @Model.Movie.Rating
-                </p>
+                <div class="rating-wrapper">
+                    <div class="progress blue">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">@Model.Movie.Rating</div>
+                    </div>
+                </div>
                 <div><p class="description">@Model.Movie.Description</p></div>
                 <p class="runtime"><span class="glyphicon glyphicon-time runtime" aria-hidden="true"></span>
                     @Model.Movie.GetRuntimeHours()h @Model.Movie.GetRuntimeMinutes()min
@@ -54,7 +60,7 @@
         </div>
     </div>
 </div>
-<div class="similar-section" style="background: @Model.Movie.ProminentColor;">
+<div class="similar-section">
     <div class="my-container">
         <div>
             <h3 class="header-text text-bold">SIMILAR MOVIES</h3>

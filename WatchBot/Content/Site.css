@@ -423,6 +423,7 @@ hr.style1 {
 .similar-section {
     width: 100%;
     margin-top: -80px;
+    background-color: #161616;
 }
     
     .similar-section .header-text {

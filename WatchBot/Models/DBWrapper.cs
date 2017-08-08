@@ -38,7 +38,7 @@ namespace WatchBot.Models
                 Description = (string) o["overview"],
                 ImdbID = (string)o["imdb_id"],
                 Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
-                Rating = (double)o["vote_average"],
+                Rating = ((double)o["vote_average"])*10 ,
                 ReleaseDate = (string)o["release_date"]
         };
 
@@ -82,18 +82,33 @@ namespace WatchBot.Models
             return movie;
         }
 
-        private Dictionary<int, MovieViewModel> GetDiscoverList(int amount, string type, string genre)
+        private Dictionary<int, MovieViewModel> GetDiscoverList(int amount, string sortBy, string genre)
         {
-            var query =
-                "&language=en-US&sort_by=" + type
-                + "&include_adult=false&include_video=false&page=1&vote_count.gte=200&with_original_language=en";
-            if (genre != null)
-                query = query + "&with_genres=" + genre;
+            var list = new Dictionary<int, MovieViewModel>();
+            int page = 1;
+            while ((list.Count + 1) <= amount)
+            {
+                var query =
+                    "&language=en-US&sort_by=" + sortBy
+                    + "&include_adult=false&include_video=false&page=" + page +
+                    "&vote_count.gte=200&with_original_language=en";
+                if (genre != null)
+                    query = query + "&with_genres=" + genre;
 
-            string fullQuery = BASE_URL + "discover/movie"
-                           + "?api_key=" + API_KEY + query;
-            string json = GetJson(fullQuery);
-            return ParseJsonArray(json);
+                string fullQuery = BASE_URL + "discover/movie"
+                                   + "?api_key=" + API_KEY + query;
+                string json = GetJson(fullQuery);
+
+                var movies = ParseJsonArray(json);
+                if (movies.Count == 0) return list;
+
+                foreach (var movie in movies)
+                {
+                    list.Add(movie.Key, movie.Value);
+                }
+                page++;
+            }
+            return list;
         }
 
         private Dictionary<int, MovieViewModel> GetMovieSpecificList(int id, string type)
@@ -107,6 +122,7 @@ namespace WatchBot.Models
         private Dictionary<int, MovieViewModel> ParseJsonArray(string json)
         {
             var list = new Dictionary<int, MovieViewModel>();
+
             var o = JObject.Parse(json);
             var results = JArray.FromObject(o["results"]);
 
@@ -167,7 +183,15 @@ namespace WatchBot.Models
             using (var wc = new WebClient())
             {
                 wc.Encoding = Encoding.UTF8;
-                json = wc.DownloadString(query);
+                try
+                {
+                    json = wc.DownloadString(query);
+                }
+                catch (Exception)
+                {
+
+                    return null;
+                }
             }
             return json;
         }
@@ -201,8 +225,8 @@ namespace WatchBot.Models
                 return discoverViewModel;
             discoverViewModel = new DiscoverViewModel
             {
-                Popular = GetDiscoverList(21, "popularity.desc", null),
-                TopRated = GetDiscoverList(21, "vote_average.desc", null)
+                Popular = GetDiscoverList(20, "popularity.desc", null),
+                TopRated = GetDiscoverList(20, "vote_average.desc", null)
             };
             SetFeatureMovies(discoverViewModel);
             HttpContext.Current.Session["Discover"] = discoverViewModel;
@@ -219,7 +243,7 @@ namespace WatchBot.Models
             {
                 GenreName = genre,
                 GenreId = _genres[genre],
-                Movies = GetDiscoverList(20, "popularity.desc", _genres[genre].ToString())
+                Movies = GetDiscoverList(60, "popularity.desc", _genres[genre].ToString())
             };
             HttpContext.Current.Session[genre] = genreViewModel;
             return genreViewModel;
