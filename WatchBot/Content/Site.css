@@ -253,6 +253,7 @@ textarea {
 
 .title {
     color: #F8F8F8;
+    padding-right: 88px;
 }
 
 .title-year {
@@ -357,6 +358,7 @@ textarea {
     overflow: hidden;
     text-overflow: ellipsis;
     max-height: 200px;
+    margin-right: 100px;
 }
 
 .runtime {
@@ -500,6 +502,9 @@ hr.style1 {
             width: 120px;
             margin: -1.3em 0 0 0;
         }
+    .description {
+        margin-right: 0;
+    }
 }
 
 @media screen and (max-width: 770px) {
