@@ -3,6 +3,6 @@
 ASP.NET Web Application <br>
 Browse Movies and TV Shows. Work in progress.
 
-![Home](http://imgur.com/a/H6XqQ)
-![Movie](http://imgur.com/a/111QQ)
-![Genre](http://imgur.com/a/wzCpU)
+![Home](http://i.imgur.com/OXDChQF.jpg)
+![Movie](http://i.imgur.com/EIGk5GK.jpg)
+![Genre](http://i.imgur.com/klmaMqD.jpg)
