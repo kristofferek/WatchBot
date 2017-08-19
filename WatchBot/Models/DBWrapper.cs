@@ -36,7 +36,7 @@ namespace WatchBot.Models
         public Movie GetMovie(int id)
         {
             var query = BASE_URL + "movie/" + id
-                           + "?api_key=" + API_KEY + "&language=en-US";
+                           + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos";
             var json = GetJson(query);
             var o = JObject.Parse(json);
             var m = GetMovieFromJObject(o);
@@ -47,7 +47,7 @@ namespace WatchBot.Models
         public TvShow GetTvShow(int id)
         {
             var query = BASE_URL + "tv/" + id
-                           + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos";
+                           + "?api_key=" + API_KEY + "&language=en-US";
             var json = GetJson(query);
             var o = JObject.Parse(json);
             var tv = GetTvShowFromJObject(o);
