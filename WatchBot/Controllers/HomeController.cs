@@ -8,19 +8,19 @@ using WatchBot.Models.ViewModels;
 
 namespace WatchBot.Controllers
 {
-    [AllowAnonymous]
     public class HomeController : Controller
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            DBWrapper movieDB = new DBWrapper();
+            Model movieDB = new Model();
             DiscoverViewModel discover = movieDB.GetDiscoverViewModel();
             return View(discover);
         }
 
         public ActionResult Movie(string id)
         {
-            return View(new DBWrapper().GetDetailsViewModel(id));
+            return View(new Model().GetMovieInfoViewModel(id));
         }
     }
 }

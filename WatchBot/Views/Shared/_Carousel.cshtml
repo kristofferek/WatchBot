@@ -1,20 +1,20 @@
-﻿@model ICollection<WatchBot.Models.ViewModels.MovieViewModel>
+﻿@model WatchBot.Models.ViewModels.CarouselViewModel
     
 <div class="carousel-wrapper">
     <div class="carousel-outer">
-        <div id="@Model.First().Id.ToString()" class="owl-carousel carousel">
-            @foreach (var item in Model)
+        <div id="@Model.CarouselName.GetHashCode()" class="owl-carousel carousel">
+            @foreach (var item in Model.Items.Values)
             {
                 @Html.Partial($"~/Views/Shared/_CarouselItem.cshtml", item)
             }
         </div>
     </div>
-    <div id="@Model.First().Id.ToString()prev" class="prev">
+    <div id="@Model.CarouselName.GetHashCode()-prev" class="prev">
         <i class="btn btn-default">
             <span class="glyphicon glyphicon-chevron-left"></span>
         </i>
     </div>
-    <div id="@Model.First().Id.ToString()next" class="next">
+    <div id="@Model.CarouselName.GetHashCode()-next" class="next">
         <i class="btn btn-default">
             <span class="glyphicon glyphicon-chevron-right"></span>
         </i>

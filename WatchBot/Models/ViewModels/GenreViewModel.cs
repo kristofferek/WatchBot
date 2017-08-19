@@ -7,12 +7,12 @@ namespace WatchBot.Models.ViewModels
     {
         public GenreViewModel()
         {
-            Movies = new Dictionary<int, MovieViewModel>();
+            Movies = new Dictionary<int, PreviewItem>();
         }
 
         public string GenreName { get; set; }
         public int GenreId { get; set; }
-        public Dictionary<int, MovieViewModel> Movies { get; set; }
+        public Dictionary<int, PreviewItem> Movies { get; set; }
 
     }
 }

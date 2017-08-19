@@ -6,25 +6,12 @@ using System.Web;
 using Microsoft.Ajax.Utilities;
 using WatchBot.Models;
 
-namespace WatchBot.Models.ViewModels
+namespace WatchBot.Models
 {
-    public class MovieViewModel
+    public class Movie : AbstractVideoItem
     {
 
-        public MovieViewModel()
-        {
-            Genres = new Dictionary<string, int>();
-        }
-
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Backdrop { get; set; }
-        public Dictionary<string, int> Genres { get; set; }
         public string Trailer { get; set; }
-        public string ImdbID { get; set; }
-        public double Rating { get; set; }
-        public string Description { get; set; }
-        public string Poster { get; set; }
         public int Runtime { get; set; }
         public string ReleaseDate { get; set; }
         public string ProminentColor { get; set; }

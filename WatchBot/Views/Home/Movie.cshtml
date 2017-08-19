@@ -1,5 +1,5 @@
 ﻿@using WatchBot.Utils
-@model WatchBot.Models.ViewModels.DetailsViewModel
+@model WatchBot.Models.ViewModels.MovieInfoViewModel
 
 <div class="backdrop">
     <div class="heroImg" style="background: url(@Model.Movie.Backdrop) 50% no-repeat;background-size:cover;height:100%;"></div>
@@ -64,9 +64,9 @@
 <div class="similar-section">
     <div class="my-container">
         <div>
-            <h3 class="header-text text-bold">SIMILAR MOVIES</h3>
+            <h3 class="header-text text-bold">@Model.Similar.CarouselName.ToUpper()</h3>
         </div>
-        @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Similar.Values)
+        @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Similar)
     </div>
 </div>
 
@@ -109,11 +109,11 @@
             lazyLoad: false
         });
 
-        var owl = $("#@Model.Similar.First().Value.Id.ToString()");
-        $("#@Model.Similar.First().Value.Id.ToString()prev").click(function () {
+        var owl = $("#@Model.Similar.CarouselName.GetHashCode()");
+        $("#@Model.Similar.CarouselName.GetHashCode()-prev").click(function () {
             owl.trigger('prev.owl');
         });
-        $("#@Model.Similar.First().Value.Id.ToString()next").click(function () {
+        $("#@Model.Similar.CarouselName.GetHashCode()-next").click(function () {
             owl.trigger('next.owl');
         });
     });

@@ -1,13 +1,11 @@
-﻿@model  WatchBot.Models.ViewModels.DiscoverViewModel
+﻿@model WatchBot.Models.ViewModels.TVShowsViewModel
 
-@Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.Carousels.ElementAt(0).Highlight)
 <div class="my-container">
     <div>
         <h3 class="header-text text-bold">@Model.Carousels.ElementAt(0).CarouselName.ToUpper()</h3>
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(0))
 </div>
-@Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.Carousels.ElementAt(1).Highlight)
 <div class="my-container">
     <div>
         <h3 class="header-text text-bold">@Model.Carousels.ElementAt(1).CarouselName.ToUpper()</h3>
@@ -59,6 +57,7 @@
             $("#@Model.Carousels.ElementAt(1).CarouselName.GetHashCode()-next").click(function () {
                 owl2.trigger('next.owl');
             });
+
         });
     </script>
 }

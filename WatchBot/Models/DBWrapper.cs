@@ -6,41 +6,67 @@ using System.Net;
 using System.Text;
 using System.Web;
 using Newtonsoft.Json.Linq;
-using WatchBot.Models.ViewModels;
 
 namespace WatchBot.Models
 {
     public class DBWrapper
     {
+        private static DBWrapper instance;
+
+        private DBWrapper() { FetchGenres();}
+
+        public static DBWrapper Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new DBWrapper();
+                }
+                return instance;
+            }
+        }
         private const string API_KEY = "78a3dcb0adbc04e0efe7af4db390f544";
         private const string BASE_URL = "https://api.themoviedb.org/3/";
 
-        private Dictionary<string, int> _genres;
 
-        public MovieViewModel GetMovie(int id)
+
+        public Dictionary<string, int> _genres;
+
+        public Movie GetMovie(int id)
         {
-            string query = BASE_URL + "movie/" + id
-                           + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos";
-            string json = GetJson(query);
+            var query = BASE_URL + "movie/" + id
+                           + "?api_key=" + API_KEY + "&language=en-US";
+            var json = GetJson(query);
             var o = JObject.Parse(json);
             var m = GetMovieFromJObject(o);
             m.Actors = GetActors(id);
             return m;
         }
 
-        private MovieViewModel GetMovieFromJObject(JObject o)
+        public TvShow GetTvShow(int id)
         {
-            var movie = new MovieViewModel
+            var query = BASE_URL + "tv/" + id
+                           + "?api_key=" + API_KEY + "&language=en-US&append_to_response=videos";
+            var json = GetJson(query);
+            var o = JObject.Parse(json);
+            var tv = GetTvShowFromJObject(o);
+            return tv;
+        }
+
+        private Movie GetMovieFromJObject(JObject o)
+        {
+            var movie = new Movie
             {
                 Id = (int) o["id"],
                 Title = (string) o["title"],
                 Backdrop = "https://image.tmdb.org/t/p/w1280" + (string) o["backdrop_path"],
                 Description = (string) o["overview"],
-                ImdbID = (string)o["imdb_id"],
                 Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
                 Rating = ((double)o["vote_average"])*10 ,
                 ReleaseDate = (string)o["release_date"]
-        };
+            };
+
 
             try
             {
@@ -51,13 +77,17 @@ namespace WatchBot.Models
                     movie.Genres[(string) genre["name"]] = (int) genre["id"];
                 }
 
-                var trailerArray = JArray.FromObject(o["videos"]["results"]);
-                foreach (var t in trailerArray)
+                var videosToken = o["videos"];
+                if (videosToken != null)
                 {
-                    var trailer = JObject.FromObject(t);
-                    movie.Trailer = "https://www.youtube.com/embed/" + trailer["key"] + "?autoplay=1";
-                    if (!trailer["type"].ToString().Equals("Trailer")) continue;
-                    break;
+                    var trailerArray = JArray.FromObject(videosToken["results"]);
+                    foreach (var t in trailerArray)
+                    {
+                        var trailer = JObject.FromObject(t);
+                        movie.Trailer = "https://www.youtube.com/embed/" + trailer["key"] + "?autoplay=1";
+                        if (!trailer["type"].ToString().Equals("Trailer")) continue;
+                        break;
+                    }
                 }
 
             }
@@ -82,9 +112,76 @@ namespace WatchBot.Models
             return movie;
         }
 
-        private Dictionary<int, MovieViewModel> GetDiscoverList(int amount, string sortBy, string genre)
+        private TvShow GetTvShowFromJObject(JObject o)
         {
-            var list = new Dictionary<int, MovieViewModel>();
+            var tvShow = new TvShow
+            {
+                Id = (int)o["id"],
+                Title = (string)o["name"],
+                Backdrop = "https://image.tmdb.org/t/p/w1280" + (string)o["backdrop_path"],
+                Description = (string)o["overview"],
+                Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
+                Rating = ((double)o["vote_average"]) * 10,
+                FirstAirDate = (string)o["first_air_date"],
+                EpisodeRuntime = (int)(o["episode_run_time"][0])
+            };
+
+            var networks = JArray.FromObject(o["networks"]);
+            tvShow.Network = (string)(JObject.FromObject(networks.First))["name"];
+
+            var genArray = JArray.FromObject(o["genres"]);
+            foreach (var t in genArray)
+            {
+                var genre = JObject.FromObject(t);
+                tvShow.Genres[(string)genre["name"]] = (int)genre["id"];
+            }
+
+            var seasons = JArray.FromObject(o["seasons"]);
+            foreach (var s in seasons)
+            {
+                var season = JObject.FromObject(s);
+                tvShow.Seasons.Add((int)season["id"], new TvSeason
+                {
+                    FirstAirDate = (string)season["air_date"],
+                    Id = (int)season["id"],
+                    NumberOfEpisodes = (int)season["episode_count"],
+                    Poster = (string)season["poster_path"],
+                    SeasonNumber = (int)season["season_number"]
+                });
+            }
+
+            return tvShow;
+        }
+
+        private PreviewItem GetPreviewItemFromJObject(JObject o, bool isAMovie)
+        {
+            var item = new PreviewItem
+            {
+                Id = (int)o["id"],
+                Title = (string)o["title"],
+                Backdrop = "https://image.tmdb.org/t/p/w1280" + (string)o["backdrop_path"],
+                Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
+                VoteCount = (int)o["vote_count"],
+                isAMovie = isAMovie
+            };
+
+            if (isAMovie)
+            {
+                item.ReleaseDate = (string)o["release_date"];
+                item.Title = (string) o["title"];
+            }
+            else  //Is a TV Show
+            {
+                item.ReleaseDate = (string)o["first_air_date"];
+                item.Title = (string)o["name"];
+            }
+
+            return item;
+        }
+
+        public Dictionary<int, PreviewItem> GetMovieList(int amount, string sortBy, string genre)
+        {
+            var list = new Dictionary<int, PreviewItem>();
             int page = 1;
             while ((list.Count + 1) <= amount)
             {
@@ -95,41 +192,85 @@ namespace WatchBot.Models
                 if (genre != null)
                     query = query + "&with_genres=" + genre;
 
-                string fullQuery = BASE_URL + "discover/movie"
+                var fullQuery = BASE_URL + "discover/movie"
                                    + "?api_key=" + API_KEY + query;
-                string json = GetJson(fullQuery);
+                var json = GetJson(fullQuery);
 
-                var movies = ParseJsonArray(json);
+                var movies = ParseJsonArray(json, true);
                 if (movies.Count == 0) return list;
 
                 foreach (var movie in movies)
                 {
-                    list.Add(movie.Key, movie.Value);
+                    if ((list.Count + 1) >= amount) { return list; }
+                    try
+                    {
+                        list.Add(movie.Key, movie.Value);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
                 page++;
             }
             return list;
         }
 
-        private Dictionary<int, MovieViewModel> GetMovieSpecificList(int id, string type)
+        public Dictionary<int, PreviewItem> GetTVList(int amount, string sortBy)
         {
-            string query = BASE_URL + "movie/" + id + "/" + type
-                           + "?api_key=" + API_KEY + "&language=en-US&page=1";
-            string json = GetJson(query);
-            return ParseJsonArray(json);
+            var list = new Dictionary<int, PreviewItem>();
+            int page = 1;
+            while ((list.Count + 1) <= amount)
+            {
+                var query = "&language=en-US&page=" + page;
+
+                var fullQuery = BASE_URL + "tv/" + sortBy
+                                   + "?api_key=" + API_KEY + query;
+                var json = GetJson(fullQuery);
+
+                var shows = ParseJsonArray(json, false);
+                if (shows.Count == 0) return list;
+
+                foreach (var show in shows)
+                {
+                    if ((list.Count + 1) >= amount) { return list; }
+                    try
+                    {
+
+                        if (show.Value.VoteCount > 100)
+                        {
+                            list.Add(show.Key, show.Value); 
+                        }
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+                page++;
+            }
+            return list;
         }
 
-        private Dictionary<int, MovieViewModel> ParseJsonArray(string json)
+        public Dictionary<int, PreviewItem> GetSimilarMoviesList(int id, string type)
         {
-            var list = new Dictionary<int, MovieViewModel>();
+            var query = BASE_URL + "movie/" + id + "/" + type
+                           + "?api_key=" + API_KEY + "&language=en-US&page=1";
+            var json = GetJson(query);
+            return ParseJsonArray(json, true);
+        }
+
+        private Dictionary<int, PreviewItem> ParseJsonArray(string json, bool isAMovie)
+        {
+            var list = new Dictionary<int, PreviewItem>();
 
             var o = JObject.Parse(json);
             var results = JArray.FromObject(o["results"]);
 
-            for (var i = 0; i < results.Count; i++)
+            foreach (var t in results)
             {
-                var movie = JObject.FromObject(results[i]);
-                var m = GetMovieFromJObject(movie);
+                var movie = JObject.FromObject(t);
+                var m = GetPreviewItemFromJObject(movie, isAMovie);
                 list[m.Id] = m;
             }
             return list;
@@ -138,9 +279,9 @@ namespace WatchBot.Models
         private List<Actor> GetActors(int movieId)
         {
             var actorList = new List<Actor>();
-            string query = BASE_URL + "movie/" + movieId + "/credits"
+            var query = BASE_URL + "movie/" + movieId + "/credits"
                            + "?api_key=" + API_KEY;
-            string json = GetJson(query);
+            var json = GetJson(query);
             var o = JObject.Parse(json);
             var actors = JArray.FromObject(o["cast"]);
             for (var i = 0; i < 5 && i < actors.Count; i++)
@@ -163,8 +304,8 @@ namespace WatchBot.Models
             if (_genres != null)
                 return;
             _genres = new Dictionary<string, int>();
-            string query = BASE_URL + "genre/movie/list?api_key=" + API_KEY + "&language=en-US";
-            string json = GetJson(query);
+            const string query = BASE_URL + "genre/movie/list?api_key=" + API_KEY + "&language=en-US";
+            var json = GetJson(query);
             var o = JObject.Parse(json);
             var results = JArray.FromObject(o["genres"]);
 
@@ -203,59 +344,6 @@ namespace WatchBot.Models
             var responseStream = response.GetResponseStream();
             var bitmap = new Bitmap(responseStream);
             return bitmap;
-        }
-
-        private void SetFeatureMovies(DiscoverViewModel dvb)
-        {
-            if (dvb == null) return;
-            var r = new Random();
-            var index = r.Next(dvb.Popular.Count - 1);
-            dvb.FeaturePopular = dvb.Popular.Values.ElementAt(index);
-            dvb.Popular.Remove(dvb.FeaturePopular.Id);
-
-            index = r.Next(dvb.TopRated.Count - 1);
-            dvb.FeatureTopRated = dvb.TopRated.Values.ElementAt(index);
-            dvb.TopRated.Remove(dvb.FeatureTopRated.Id);
-        }
-
-        public DiscoverViewModel GetDiscoverViewModel()
-        {
-            var discoverViewModel = HttpContext.Current.Session["Discover"] as DiscoverViewModel;
-            if (discoverViewModel != null)
-                return discoverViewModel;
-            discoverViewModel = new DiscoverViewModel
-            {
-                Popular = GetDiscoverList(20, "popularity.desc", null),
-                TopRated = GetDiscoverList(20, "vote_average.desc", null)
-            };
-            SetFeatureMovies(discoverViewModel);
-            HttpContext.Current.Session["Discover"] = discoverViewModel;
-            return discoverViewModel;
-        }
-
-        public GenreViewModel GetGenreViewModel(string genre, int page)
-        {
-            var genreViewModel = HttpContext.Current.Session[genre] as GenreViewModel;
-            if (genreViewModel != null)
-                return genreViewModel;
-            FetchGenres();
-            genreViewModel = new GenreViewModel
-            {
-                GenreName = genre,
-                GenreId = _genres[genre],
-                Movies = GetDiscoverList(60, "popularity.desc", _genres[genre].ToString())
-            };
-            HttpContext.Current.Session[genre] = genreViewModel;
-            return genreViewModel;
-        }
-
-        public DetailsViewModel GetDetailsViewModel(string movieId)
-        {
-            int id = Int32.Parse(movieId);
-            var detailsViewModel = new DetailsViewModel();
-            detailsViewModel.Movie = GetMovie(id);
-            detailsViewModel.Similar = GetMovieSpecificList(id, "similar");
-            return detailsViewModel;
         }
     }
 }

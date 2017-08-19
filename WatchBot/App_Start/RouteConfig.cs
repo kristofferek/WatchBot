@@ -25,7 +25,11 @@ namespace WatchBot
                 defaults: new { controller = "Genre", action = "Action", id = 1 }
             );
 
-            //TODO
+            routes.MapRoute(
+                name: "TvShows",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "TV", action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }
