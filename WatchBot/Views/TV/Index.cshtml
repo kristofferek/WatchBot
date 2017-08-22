@@ -1,16 +1,26 @@
 ﻿@model WatchBot.Models.ViewModels.TVShowsViewModel
 
+@Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.Carousels.ElementAt(0).Highlight)
 <div class="my-container">
     <div>
         <h3 class="header-text text-bold">@Model.Carousels.ElementAt(0).CarouselName.ToUpper()</h3>
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(0))
 </div>
+<hr class="carousel-seperator" />
+@Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.Carousels.ElementAt(1).Highlight)
 <div class="my-container">
     <div>
         <h3 class="header-text text-bold">@Model.Carousels.ElementAt(1).CarouselName.ToUpper()</h3>
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(1))
+</div>
+<hr class="carousel-seperator"/>
+<div class="my-container">
+    <div>
+        <h3 class="header-text text-bold">@Model.Carousels.ElementAt(2).CarouselName.ToUpper()</h3>
+    </div>
+    @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(2))
 </div>
 
 @section Scripts
@@ -56,6 +66,14 @@
             });
             $("#@Model.Carousels.ElementAt(1).CarouselName.GetHashCode()-next").click(function () {
                 owl2.trigger('next.owl');
+            });
+
+            var owl3 = $("#@Model.Carousels.ElementAt(2).CarouselName.GetHashCode()");
+            $("#@Model.Carousels.ElementAt(2).CarouselName.GetHashCode()-prev").click(function () {
+                owl3.trigger('prev.owl');
+            });
+            $("#@Model.Carousels.ElementAt(2).CarouselName.GetHashCode()-next").click(function () {
+                owl3.trigger('next.owl');
             });
 
         });

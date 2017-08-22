@@ -14,8 +14,6 @@ namespace WatchBot.Models
         public string Trailer { get; set; }
         public int Runtime { get; set; }
         public string ReleaseDate { get; set; }
-        public string ProminentColor { get; set; }
-        public ICollection<Actor> Actors { get; set; }
 
         public int GetRuntimeHours()
         {

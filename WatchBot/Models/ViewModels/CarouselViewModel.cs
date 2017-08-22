@@ -13,7 +13,7 @@ namespace WatchBot.Models.ViewModels
         }
 
         public string CarouselName { get; set; }
-        public Movie Highlight { get; set; }
+        public PreviewItem Highlight { get; set; }
         public Dictionary<int, PreviewItem> Items { get; set; }
 
     }

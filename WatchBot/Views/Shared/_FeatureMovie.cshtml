@@ -1,13 +1,22 @@
-﻿@model WatchBot.Models.Movie
+﻿@model WatchBot.Models.PreviewItem
 
 <div class="feature-img row">
-    <img style="height: auto; width: 100%;" src="@Model.Backdrop" />
+    <img style="height: auto; width: 100%;" src="@Model.BackdropHighRes" />
 </div>
 <div class="feature-info">
     <div class="my-container">
-        <a href=@Url.Action("Movie", "Home", new { id = Model.Id.ToString() })>
-            <h1 class="text-bold">@Model.Title</h1>
-        </a>
+        @if (Model.IsAMovie)
+        {
+            <a href=@Url.Action("Movie", "Home", new {id = Model.Id.ToString()})>
+                <h1 class="text-bold">@Model.Title</h1>
+            </a>
+        }
+        else
+        {
+            <a href=@Url.Action("TvShow", "TV", new {id = Model.Id.ToString()})>
+                <h1 class="text-bold">@Model.Title</h1>
+            </a>
+        } 
         <p class="description">@Model.Description</p>
     </div>
 </div>

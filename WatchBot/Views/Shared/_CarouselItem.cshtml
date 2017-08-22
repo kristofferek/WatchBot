@@ -1,22 +1,24 @@
 ﻿@model WatchBot.Models.PreviewItem
 
-<div class="item">
-    @if (Model.isAMovie)
+<div class="item-container">
+    <div class="item">
+        <img src="@Model.Backdrop" />
+        <div class="tn-title item">
+            <p>@Model.Title.ToUpper()</p>
+        </div>
+    </div>
+    @if (Model.IsAMovie)
     {
         <a href=@Url.Action("Movie", "Home", new {id = Model.Id.ToString()})>
-            <img src="@Model.Backdrop" />
-            <div class="tn-title item">
-                <p>@Model.Title.ToUpper()</p>
+            <div class="middle">
             </div>
         </a>
     }
     else
     {
         <a href=@Url.Action("TvShow", "TV", new {id = Model.Id.ToString()})>
-            <img src="@Model.Backdrop" />
-            <div class="tn-title item">
-                <p>@Model.Title.ToUpper()</p>
+            <div class="middle">
             </div>
         </a>
-    } 
+    }
 </div>

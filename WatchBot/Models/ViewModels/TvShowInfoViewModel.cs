@@ -8,6 +8,6 @@ namespace WatchBot.Models.ViewModels
     public class TvShowInfoViewModel
     {
         public TvShow TvShow { get; set; }
-        public Dictionary<int, PreviewItem> Similar { get; set; }
+        public CarouselViewModel Similar { get; set; }
     }
 }

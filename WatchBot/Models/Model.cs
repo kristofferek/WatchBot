@@ -20,14 +20,14 @@ namespace WatchBot.Models
                 CarouselName = "Popular",
                 Items = DBWrapper.Instance.GetMovieList(21, "popularity.desc", null)
             });
-            SetFeatureMovie(discoverViewModel.Carousels.ElementAt(0));
+            SetFeatureItem(discoverViewModel.Carousels.ElementAt(0));
 
             discoverViewModel.Carousels.Add(new CarouselViewModel
             {
                 CarouselName = "Top Rated",
                 Items = DBWrapper.Instance.GetMovieList(21, "vote_average.desc", null)
             });
-            SetFeatureMovie(discoverViewModel.Carousels.ElementAt(1));
+            SetFeatureItem(discoverViewModel.Carousels.ElementAt(1));
 
             HttpContext.Current.Session["Discover"] = discoverViewModel;
             return discoverViewModel;
@@ -44,14 +44,21 @@ namespace WatchBot.Models
                 CarouselName = "On The Air",
                 Items = DBWrapper.Instance.GetTVList(21, "on_the_air")
             });
-            //SetFeatureMovie(TVModel.Carousels.ElementAt(0));
+            SetFeatureItem(TVModel.Carousels.ElementAt(0));
 
             TVModel.Carousels.Add(new CarouselViewModel
             {
                 CarouselName = "Popular",
                 Items = DBWrapper.Instance.GetTVList(21, "popular")
             });
-            //SetFeatureMovie(TVModel.Carousels.ElementAt(1));
+            SetFeatureItem(TVModel.Carousels.ElementAt(1));
+
+            TVModel.Carousels.Add(new CarouselViewModel
+            {
+                CarouselName = "Top Rated",
+                Items = DBWrapper.Instance.GetTVList(21, "top_rated")
+            });
+            SetFeatureItem(TVModel.Carousels.ElementAt(2));
 
             HttpContext.Current.Session["TVShows"] = TVModel;
             return TVModel;
@@ -82,18 +89,18 @@ namespace WatchBot.Models
                 Similar = new CarouselViewModel
                 {
                     CarouselName = "Similar Movies",
-                    Items = DBWrapper.Instance.GetSimilarMoviesList(id, "similar")
+                    Items = DBWrapper.Instance.GetSimilarMoviesList(id, "movie", true)
                 }
             };
             return movieInfoViewModel;
         }
 
-        private void SetFeatureMovie(CarouselViewModel cm)
+        private void SetFeatureItem(CarouselViewModel cm)
         {
             if (cm == null) return;
             var r = new Random();
             var index = r.Next(cm.Items.Count - 1);
-            cm.Highlight = DBWrapper.Instance.GetMovie(cm.Items.Values.ElementAt(index).Id);
+            cm.Highlight = cm.Items.Values.ElementAt(index);
             cm.Items.Remove(cm.Highlight.Id);
         }
 
@@ -102,8 +109,12 @@ namespace WatchBot.Models
             var id = int.Parse(tvShowId);
             var tvShowInfo = new TvShowInfoViewModel()
             {
-                TvShow = DBWrapper.Instance.GetTvShow(id)
-                //TODO: Similar
+                TvShow = DBWrapper.Instance.GetTvShow(id),
+                Similar = new CarouselViewModel
+                {
+                    CarouselName = "Similar Tv Shows",
+                    Items = DBWrapper.Instance.GetSimilarMoviesList(id, "tv", false)
+                }
             };
             return tvShowInfo;
         }

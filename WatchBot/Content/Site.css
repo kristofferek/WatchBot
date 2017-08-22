@@ -91,7 +91,7 @@ textarea {
 }
 
     .feature-img img {
-        margin-top: 1%;
+        margin-top: 2%;
     }
 
 .feature-info {
@@ -169,7 +169,7 @@ textarea {
 .carousel-wrapper {
     width: 100%;
     position: relative;
-    margin-bottom: 12.5em;
+    margin-bottom: 8em;
 }
 
 .carousel-outer {
@@ -209,20 +209,54 @@ textarea {
             font-size: 24px;
         }
 
-.item {
+.item-container {
+    position: relative;
     width: 100%;
 }
 
-    .item:hover {
-        width: 101%;
-    }
+.item {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    backface-visibility: hidden;
+}
+
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translate(0, -100%);
+    -ms-transform: translate(0, -100%);
+    background-color: #26A69A;
+}
+
+.item-container:hover .middle {
+    opacity: 0.3;
+}
+
+.carousel-seperator {
+    position: relative;
+    top: -80px;
+    margin: 0 10%;
+    margin-bottom: -2%;
+    opacity: 1;
+    border: 0; 
+    height: 1px; 
+    background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+    background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+    background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+    background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+}
 
 /*Movie.cshtml specific*/
 
 .backdrop {
     position: relative;
     background: #161616;
-    height: 705px;
+    height: 700px;
     margin-left: 0;
     margin-right: 0;
     top: -80px;
@@ -231,11 +265,11 @@ textarea {
 
 .heroImg {
     position: absolute;
-    top: 0;
+    top: 30px;
     left: 50%;
     width: 100%;
     margin-left: -50%;
-    min-height: 705px;
+    min-height: 700px;
     z-index: 0;
 }
 
@@ -243,12 +277,12 @@ textarea {
     height: 100%;
     position: absolute;
     z-index: 0;
-    top: 0;
+    top: 30px;
     left: 0;
     width: 100%;
     opacity: 0.91;
     filter: alpha(opacity=91); /* For IE8 and earlier */
-    max-height: 705px;
+    max-height: 700px;
 }
 
 .title {
@@ -267,7 +301,7 @@ textarea {
     position: absolute;
     height: 100%;
     width: 100%;
-    padding-top: 80px;
+    padding-top: 65px;
     padding-left: 9%;
     padding-right: 9%;
     margin-top: 3%;
@@ -281,11 +315,19 @@ textarea {
 
     .details-poster img {
         max-height: 350px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
     }
 
 .details-content > div > div > h1 {
     margin: 0 0 1% 0;
     font-size: 250%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 40px;     /* fallback */
+    max-height: 80px;      /* fallback */
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
 }
 
 #details-info {
@@ -381,12 +423,17 @@ textarea {
     }
 
 hr.style1 {
-    margin: 20px 5%;
+    margin: 30px 5% 20px 5%;
 }
 
 .actor-row {
     text-align: center;
     overflow: hidden;
+}
+
+.character-name {
+    color: #A8A8A8 !important;
+
 }
 
 .details-actor {
@@ -407,14 +454,19 @@ hr.style1 {
     .details-actor p {
         color: #F8F8F8;
         text-overflow: ellipsis;
-        max-height: 20px;
+        max-height: 40px;
         overflow: hidden;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        max-width: 200px;
     }
 
     .details-actor div {
         width: 150px;
         height: 150px;
         overflow: hidden;
+        margin-right: auto;
+        margin-left: auto;
     }
 
         .details-actor div img {
@@ -424,7 +476,7 @@ hr.style1 {
 
 .similar-section {
     width: 100%;
-    margin-top: -80px;
+    margin-top: -45px;
     background-color: #161616;
 }
     
@@ -480,6 +532,21 @@ hr.style1 {
     .poster img:hover + div, .poster .overlay:hover {
         display: flex;
     }
+
+.movie-thumbnail {
+    display:inline-block
+}
+
+@media screen and (max-width: 1200px) {
+    
+    .details-content > div > div > h1 {
+        font-size: 230%;
+    }
+
+    .description {
+        font-size: 100%;
+    }
+}
 
 @media screen and (max-width: 830px) {
     .modal-lg {
@@ -546,7 +613,7 @@ hr.style1 {
     }
 
     .feature-img img {
-        margin-top: 8%;
+        margin-top: 2%;
     }
 
     .feature-img-fade {
@@ -560,7 +627,7 @@ hr.style1 {
     }
 
     .carousel-wrapper {
-        margin-bottom: 8em;
+        margin-bottom: 6em;
     }
 
     .carousel {

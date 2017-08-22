@@ -1,10 +1,108 @@
 ﻿@model WatchBot.Models.ViewModels.TvShowInfoViewModel
 
-<h2>TvShow</h2>
+<div class="backdrop">
+    <div class="heroImg" style="background: url(@Model.TvShow.Backdrop) 50% no-repeat;background-size:cover;height:100%;"></div>
+    <div class="gradient" style="background-image: radial-gradient(at 10% 30%, @Model.TvShow.ProminentColor 0%, #161616 90%);"></div>
+    <div class="details-content">
+        <div class="row">
+            <a class="col-xs-1 col-sm-3 col-md-2 details-poster" href="@Model.TvShow.Poster">
+                <img class="img-responsive" src="@Model.TvShow.Poster" />
+            </a>
+            <div id="details-info" class="col-xs-10 col-sm-8 col-md-8">
+                <h1 class="title text-bold">@Model.TvShow.Title<span class="title-year"> (@Model.TvShow.FirstAirDate.Split('-')[0])</span></h1>
 
-<div>
-    <h4>@Model.TvShow.Title</h4>
-    <hr />
-    <dl class="dl-horizontal">
-    </dl>
+                <div class="btn-group">
+                    @foreach (var x in Model.TvShow.Genres.Keys)
+                    {<span class="btn genre">@x</span>}
+                </div>
+                <div class="rating-wrapper">
+                    <div class="progress blue">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">@Model.TvShow.Rating</div>
+                    </div>
+                    <p class="rating-text text-bold">USER<br />RATING</p>
+                </div>
+                <div><p class="description">@Model.TvShow.Description</p></div>
+                <p class="runtime">
+                    <span class="glyphicon glyphicon-time runtime" aria-hidden="true"></span>
+                    Episode length: @Model.TvShow.EpisodeRuntime min
+                </p>
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content myModal">
+                            <div class="modal-body videowrapper">
+                                <iframe frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="style1" style="border-top: 2px solid @Model.TvShow.ProminentColor;">
+        <div class="actor-row">
+            @foreach (var x in Model.TvShow.Actors)
+            {
+                <div class="details-actor">
+                    <div class="img-circle" style="border: 2px solid @Model.TvShow.ProminentColor;">
+                        <img src="@x.Picture" />
+                    </div>
+                    <p>@x.Name</p>
+                    <p class="character-name">(@x.CharacterName)</p>
+                </div>
+            }
+        </div>
+    </div>
 </div>
+<div class="similar-section">
+    <div class="my-container">
+        <div>
+            <h3 class="header-text text-bold">@Model.Similar.CarouselName.ToUpper()</h3>
+        </div>
+        @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Similar)
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".owl-carousel").owlCarousel({
+            margin: 4,
+            stagePadding: 20,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 3
+                },
+                1200: {
+                    items: 4
+                },
+                1500: {
+                    items: 5
+                }
+            },
+            loop: true,
+            slideBy: "page",
+            lazyLoad: false
+        });
+
+        var owl = $("#@Model.Similar.CarouselName.GetHashCode()");
+        $("#@Model.Similar.CarouselName.GetHashCode()-prev").click(function () {
+            owl.trigger('prev.owl');
+        });
+        $("#@Model.Similar.CarouselName.GetHashCode()-next").click(function () {
+            owl.trigger('next.owl');
+        });
+    });
+    </script>
+}

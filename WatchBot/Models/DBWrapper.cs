@@ -40,7 +40,7 @@ namespace WatchBot.Models
             var json = GetJson(query);
             var o = JObject.Parse(json);
             var m = GetMovieFromJObject(o);
-            m.Actors = GetActors(id);
+            m.Actors = GetActors(id, "movie");
             return m;
         }
 
@@ -51,6 +51,7 @@ namespace WatchBot.Models
             var json = GetJson(query);
             var o = JObject.Parse(json);
             var tv = GetTvShowFromJObject(o);
+            tv.Actors = GetActors(id, "tv");
             return tv;
         }
 
@@ -64,8 +65,11 @@ namespace WatchBot.Models
                 Description = (string) o["overview"],
                 Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
                 Rating = ((double)o["vote_average"])*10 ,
-                ReleaseDate = (string)o["release_date"]
-            };
+                ReleaseDate = (string)o["release_date"],
+                ProminentColor = Utils.Utils.GetDominantColor(
+                GetBitmapFromUrl("https://image.tmdb.org/t/p/w92" +
+                                 (string)o["poster_path"]))
+        };
 
 
             try
@@ -105,9 +109,6 @@ namespace WatchBot.Models
                 Console.WriteLine(movie.Title);
                 Console.WriteLine(e);
             }
-            movie.ProminentColor = Utils.Utils.GetDominantColor(
-                GetBitmapFromUrl("https://image.tmdb.org/t/p/w92" +
-                                 (string) o["poster_path"]));
 
             return movie;
         }
@@ -123,8 +124,11 @@ namespace WatchBot.Models
                 Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
                 Rating = ((double)o["vote_average"]) * 10,
                 FirstAirDate = (string)o["first_air_date"],
-                EpisodeRuntime = (int)(o["episode_run_time"][0])
-            };
+                EpisodeRuntime = (int)(o["episode_run_time"][0]),
+                ProminentColor = Utils.Utils.GetDominantColor(
+                GetBitmapFromUrl("https://image.tmdb.org/t/p/w92" +
+                                 (string)o["poster_path"]))
+        };
 
             var networks = JArray.FromObject(o["networks"]);
             tvShow.Network = (string)(JObject.FromObject(networks.First))["name"];
@@ -159,10 +163,12 @@ namespace WatchBot.Models
             {
                 Id = (int)o["id"],
                 Title = (string)o["title"],
-                Backdrop = "https://image.tmdb.org/t/p/w1280" + (string)o["backdrop_path"],
+                Backdrop = "https://image.tmdb.org/t/p/w780" + (string)o["backdrop_path"],
+                BackdropHighRes = "https://image.tmdb.org/t/p/original" + (string)o["backdrop_path"],
                 Poster = "https://image.tmdb.org/t/p/w500" + (string)o["poster_path"],
                 VoteCount = (int)o["vote_count"],
-                isAMovie = isAMovie
+                Description = (string)o["overview"],
+                IsAMovie = isAMovie
             };
 
             if (isAMovie)
@@ -183,12 +189,12 @@ namespace WatchBot.Models
         {
             var list = new Dictionary<int, PreviewItem>();
             int page = 1;
-            while ((list.Count + 1) <= amount)
+            while ((list.Count) < amount)
             {
                 var query =
                     "&language=en-US&sort_by=" + sortBy
                     + "&include_adult=false&include_video=false&page=" + page +
-                    "&vote_count.gte=200&with_original_language=en";
+                    "&vote_count.gte=100&with_original_language=en";
                 if (genre != null)
                     query = query + "&with_genres=" + genre;
 
@@ -198,19 +204,7 @@ namespace WatchBot.Models
 
                 var movies = ParseJsonArray(json, true);
                 if (movies.Count == 0) return list;
-
-                foreach (var movie in movies)
-                {
-                    if ((list.Count + 1) >= amount) { return list; }
-                    try
-                    {
-                        list.Add(movie.Key, movie.Value);
-                    }
-                    catch (ArgumentException e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
+                AddOnlyPopularItems(list, movies, amount);
                 page++;
             }
             return list;
@@ -220,7 +214,7 @@ namespace WatchBot.Models
         {
             var list = new Dictionary<int, PreviewItem>();
             int page = 1;
-            while ((list.Count + 1) <= amount)
+            while ((list.Count) < amount)
             {
                 var query = "&language=en-US&page=" + page;
 
@@ -230,34 +224,49 @@ namespace WatchBot.Models
 
                 var shows = ParseJsonArray(json, false);
                 if (shows.Count == 0) return list;
-
-                foreach (var show in shows)
-                {
-                    if ((list.Count + 1) >= amount) { return list; }
-                    try
-                    {
-
-                        if (show.Value.VoteCount > 100)
-                        {
-                            list.Add(show.Key, show.Value); 
-                        }
-                    }
-                    catch (ArgumentException e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
+                AddOnlyPopularItems(list, shows, amount);
                 page++;
             }
             return list;
         }
 
-        public Dictionary<int, PreviewItem> GetSimilarMoviesList(int id, string type)
+        public Dictionary<int, PreviewItem> GetSimilarMoviesList(int id, string videoType, bool isAMovie)
         {
-            var query = BASE_URL + "movie/" + id + "/" + type
-                           + "?api_key=" + API_KEY + "&language=en-US&page=1";
-            var json = GetJson(query);
-            return ParseJsonArray(json, true);
+            var list = new Dictionary<int, PreviewItem>();
+            int page = 1;
+
+            while (list.Count < 20)
+            {
+                var query = BASE_URL + videoType + "/" + id + "/similar"
+                               + "?api_key=" + API_KEY + "&language=en-US&page=" + page;
+                var json = GetJson(query);
+                var fetchedList = ParseJsonArray(json, isAMovie);
+                if (fetchedList.Count == 0) return list;
+                AddOnlyPopularItems(list, fetchedList, 20);
+                page++; 
+            }
+            return list;
+        }
+
+        private void AddOnlyPopularItems(Dictionary<int, PreviewItem> listToShow,
+            Dictionary<int, PreviewItem> fetchedList, int amount)
+        {
+            foreach (var item in fetchedList)
+            {
+                if ((listToShow.Count) >= amount) { return; }
+                try
+                {
+
+                    if (item.Value.VoteCount > 100)
+                    {
+                        listToShow.Add(item.Key, item.Value);
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
         }
 
         private Dictionary<int, PreviewItem> ParseJsonArray(string json, bool isAMovie)
@@ -276,24 +285,29 @@ namespace WatchBot.Models
             return list;
         }
 
-        private List<Actor> GetActors(int movieId)
+        private List<Actor> GetActors(int id, string videoType)
         {
             var actorList = new List<Actor>();
-            var query = BASE_URL + "movie/" + movieId + "/credits"
+            var query = BASE_URL + videoType + "/" + id + "/credits"
                            + "?api_key=" + API_KEY;
             var json = GetJson(query);
             var o = JObject.Parse(json);
             var actors = JArray.FromObject(o["cast"]);
-            for (var i = 0; i < 5 && i < actors.Count; i++)
+            int i = 0;
+            while (actorList.Count <= 5 && i < actors.Count)
             {
                 var actorObj = JObject.FromObject(actors[i]);
-                var actor = new Actor
+                if ((int)actorObj["order"] <= 6)
                 {
-                    Name = (string) actorObj["name"],
-                    MovieName = (string) actorObj["character"],
-                    Picture = "https://image.tmdb.org/t/p/w500" + (string) actorObj["profile_path"]
-                };
-                actorList.Add(actor);
+                    var actor = new Actor
+                    {
+                        Name = (string)actorObj["name"],
+                        CharacterName = (string)actorObj["character"],
+                        Picture = "https://image.tmdb.org/t/p/w185" + (string)actorObj["profile_path"]
+                    };
+                    actorList.Add(actor); 
+                }
+                i++;
             }
             return actorList;
         }

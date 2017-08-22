@@ -19,6 +19,8 @@ namespace WatchBot.Models
         public string Title { get; set; }
         public double Rating { get; set; }
         public string Description { get; set; }
+        public string ProminentColor { get; set; }
+        public ICollection<Actor> Actors { get; set; }
 
     }
 }
