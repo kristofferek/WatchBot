@@ -1,8 +1,12 @@
-﻿@model WatchBot.Models.ViewModels.GenreViewModel
+﻿@model WatchBot.Models.ViewModels.SearchResultViewModel
 
-@{
-    ViewBag.Title = "Search";
-}
-
-<h2>Search</h2>
+<div class="my-container">
+    <h2 class="genre-title text-bold header-text">Search: @Model.SearchString</h2>
+    <div id="poster-grid">
+        @foreach (var item in Model.Items.Values)
+        {
+            @Html.Partial($"~/Views/Shared/_Poster.cshtml", item)
+        }
+    </div>
+</div>
 

@@ -57,7 +57,7 @@ textarea {
 .submit {
     height: 40px;
     width: 40px;
-    margin: 5px px 0 2px;
+    margin: 5px 20px 0 2px;
     background-color: transparent;
     background-image: url('images/searchicon.png');
     background-position: center;
@@ -597,6 +597,7 @@ hr.style1 {
 
 #poster-grid {
     display:inline-block;
+    width: 100%;
 }
 
 .poster {
@@ -633,9 +634,6 @@ hr.style1 {
     .poster img:hover + div, .poster .overlay:hover {
         display: flex;
     }
-
-.movie-thumbnail {
-}
 
 @media screen and (max-width: 1200px) {
     

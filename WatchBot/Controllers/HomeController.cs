@@ -25,7 +25,7 @@ namespace WatchBot.Controllers
 
         public ActionResult Search(string searchString)
         {
-            return View();
+            return View(new Model().GetSearchResultViewModel(searchString));
         }
     }
 }

@@ -7,6 +7,13 @@ using System.Text;
 using System.Web;
 using Newtonsoft.Json.Linq;
 
+
+/* Using TMDB as database for info about movies and tv shows.
+ * Returns JSON
+ * Read more here: https://www.themoviedb.org/documentation/api
+ * https://developers.themoviedb.org/3
+ */
+
 namespace WatchBot.Models
 {
     public class DBWrapper
@@ -157,8 +164,11 @@ namespace WatchBot.Models
             return tvShow;
         }
 
-        private PreviewItem GetPreviewItemFromJObject(JObject o, bool isAMovie)
+        private PreviewItem GetPreviewItemFromJObject(JObject o)
         {
+            bool isAMovie = o["title"] != null;
+            if (o["known_for"] != null) return null; //Object is a person, which we do not handle. Return null
+
             var item = new PreviewItem
             {
                 Id = (int)o["id"],
@@ -171,12 +181,12 @@ namespace WatchBot.Models
                 IsAMovie = isAMovie
             };
 
-            if (isAMovie)
+            if (isAMovie) //Movie properties
             {
                 item.ReleaseDate = (string)o["release_date"];
                 item.Title = (string) o["title"];
             }
-            else  //Is a TV Show
+            else  //TV Show properties
             {
                 item.ReleaseDate = (string)o["first_air_date"];
                 item.Title = (string)o["name"];
@@ -202,13 +212,14 @@ namespace WatchBot.Models
                                    + "?api_key=" + API_KEY + query;
                 var json = GetJson(fullQuery);
 
-                var movies = ParseJsonArray(json, true);
+                var movies = ParseJsonArray(json);
                 if (movies.Count == 0) return list;
                 AddOnlyPopularItems(list, movies, amount);
                 page++;
             }
             return list;
         }
+
 
         public Dictionary<int, PreviewItem> GetTVList(int amount, string sortBy)
         {
@@ -222,7 +233,7 @@ namespace WatchBot.Models
                                    + "?api_key=" + API_KEY + query;
                 var json = GetJson(fullQuery);
 
-                var shows = ParseJsonArray(json, false);
+                var shows = ParseJsonArray(json);
                 if (shows.Count == 0) return list;
                 AddOnlyPopularItems(list, shows, amount);
                 page++;
@@ -233,19 +244,40 @@ namespace WatchBot.Models
         public Dictionary<int, PreviewItem> GetSimilarMoviesList(int id, string videoType, bool isAMovie)
         {
             var list = new Dictionary<int, PreviewItem>();
-            int page = 1;
+            var page = 1;
 
             while (list.Count < 20)
             {
                 var query = BASE_URL + videoType + "/" + id + "/similar"
                                + "?api_key=" + API_KEY + "&language=en-US&page=" + page;
                 var json = GetJson(query);
-                var fetchedList = ParseJsonArray(json, isAMovie);
+                var fetchedList = ParseJsonArray(json);
                 if (fetchedList.Count == 0) return list;
                 AddOnlyPopularItems(list, fetchedList, 20);
                 page++; 
             }
             return list;
+        }
+
+        public Dictionary<int, PreviewItem> GetSearchResultList(string searchResult)
+        {
+            var list = new Dictionary<int, PreviewItem>();
+
+            var query = BASE_URL + "search/multi?api_key=" + API_KEY + "&language=en-US&query=" + searchResult
+                + "&include_adult=false";
+
+            var json = GetJson(query);
+            var fetchedList = ParseJsonArray(json);
+
+            foreach (var item in fetchedList)
+            {
+                if (!item.Value.Poster.Equals("https://image.tmdb.org/t/p/w500"))
+                {
+                    list.Add(item.Key, item.Value);
+                }
+            }
+            return list;
+
         }
 
         private void AddOnlyPopularItems(Dictionary<int, PreviewItem> listToShow,
@@ -257,7 +289,7 @@ namespace WatchBot.Models
                 try
                 {
 
-                    if (item.Value.VoteCount > 100)
+                    if (item.Value.VoteCount > 100 && !item.Value.Poster.Equals("https://image.tmdb.org/t/p/w500"))
                     {
                         listToShow.Add(item.Key, item.Value);
                     }
@@ -269,7 +301,7 @@ namespace WatchBot.Models
             }
         }
 
-        private Dictionary<int, PreviewItem> ParseJsonArray(string json, bool isAMovie)
+        private Dictionary<int, PreviewItem> ParseJsonArray(string json)
         {
             var list = new Dictionary<int, PreviewItem>();
 
@@ -278,9 +310,12 @@ namespace WatchBot.Models
 
             foreach (var t in results)
             {
-                var movie = JObject.FromObject(t);
-                var m = GetPreviewItemFromJObject(movie, isAMovie);
-                list[m.Id] = m;
+                var item = JObject.FromObject(t);
+                var m = GetPreviewItemFromJObject(item);
+                if (m != null)
+                {
+                    list[m.Id] = m;
+                }
             }
             return list;
         }

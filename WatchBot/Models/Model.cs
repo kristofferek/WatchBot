@@ -118,5 +118,15 @@ namespace WatchBot.Models
             };
             return tvShowInfo;
         }
+
+        public SearchResultViewModel GetSearchResultViewModel(string searchString)
+        {
+            var searchResult = new SearchResultViewModel
+            {
+                Items = DBWrapper.Instance.GetSearchResultList(searchString),
+                SearchString = searchString
+            };
+            return searchResult;
+        }
     }
 }
