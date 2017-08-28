@@ -7,7 +7,6 @@
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(0))
 </div>
-<hr class="carousel-seperator" />
 @Html.Partial($"~/Views/Shared/_FeatureMovie.cshtml", Model.Carousels.ElementAt(1).Highlight)
 <div class="my-container">
     <div>
@@ -15,13 +14,14 @@
     </div>
     @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(1))
 </div>
-<hr class="carousel-seperator"/>
-<div class="my-container">
-    <div>
-        <h3 class="header-text text-bold">@Model.Carousels.ElementAt(2).CarouselName.ToUpper()</h3>
+<section class="seperator-doublediagonal">
+    <div class="my-container">
+        <div>
+            <h3 class="header-text text-bold">@Model.Carousels.ElementAt(2).CarouselName.ToUpper()</h3>
+        </div>
+        @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(2))
     </div>
-    @Html.Partial($"~/Views/Shared/_Carousel.cshtml", Model.Carousels.ElementAt(2))
-</div>
+</section>B
 
 @section Scripts
 {

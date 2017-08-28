@@ -22,5 +22,10 @@ namespace WatchBot.Controllers
         {
             return View(new Model().GetMovieInfoViewModel(id));
         }
+
+        public ActionResult Search(string searchString)
+        {
+            return View();
+        }
     }
 }

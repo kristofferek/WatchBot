@@ -15,7 +15,7 @@
 </head>
 <body>
     <div id="page">
-        <nav class="navbar navbar-default my-nav">
+        <nav class="navbar navbar-default my-nav navbar-fixed-top">
             <div class="my-container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -51,6 +51,16 @@
                         </li>
                     </ul>
                     @Html.Partial($"~/Views/Shared/_LoginPartial.cshtml")
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "navbar-right" }))
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <input class="search-input" type="text" id="searchString" name="searchString" placeholder="Search.." />
+                            </li>
+                            <li><input class="submit" type="submit" id="submitId" value="" /></li>
+                        </ul>
+                        <div class="nav-divider"></div>
+                    }
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
